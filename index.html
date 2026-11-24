@@ -1,0 +1,2344 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>암기 처방전 복습</title>
+<meta name="description" content="공부한 단원을 넣으면 책 「암기 처방전」의 간격표대로 복습 날짜를 잡아 주는 앱이에요. 덮고 꺼내기 타이머와 질문 카드, 시험 2주 전 총복습까지. 기록은 이 휴대폰에만 저장돼요.">
+<meta name="theme-color" content="#0F3D38">
+<meta name="color-scheme" content="light dark">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="icons/favicon-64.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="암기처방전">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta property="og:type" content="website">
+<meta property="og:title" content="암기 처방전 복습 알림">
+<meta property="og:description" content="공부한 단원을 넣으면 책 「암기 처방전」의 간격표대로 복습 날짜를 잡아 주는 앱이에요. 덮고 꺼내기 타이머와 질문 카드, 시험 2주 전 총복습까지. 기록은 이 휴대폰에만 저장돼요.">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:url" content="https://first-best.github.io/amgi-rx/">
+<meta property="og:image" content="https://first-best.github.io/amgi-rx/icons/icon-512.png">
+<style>
+/* 레이아웃: 휴대폰 한 줄 기둥(최대 560px). 위는 짙은 초록 띠(책 표지와 같은 색), 아래는 탭 막대.
+   색: 책 표지의 짙은 초록 · 크림 · 주홍 · 민트를 앱 화면에 맞게 옮겼다. */
+@font-face {
+  font-family: "AmgiDisplay";
+  src: url(data:font/woff2;base64,d09GMgABAAAAAA0sABEAAAAAF6QAAAzNAAIAxQAAAAAAAAAAAAAAAAAAAAAAAAAAGYFeG4EYHEgGYD9TVEFUKgB8EQgKoASZJgE2AiQDRAsqAAQgBYRYByAXJBgqG/USSI7S1HCSJHlJkhRBtJZVz26AWeg4YgUAOvJ8lM2DsSjJszDvd3jaVv+GcJFBARkGsAqwAgMjsWoGMAqswGrcdMFI1E2Ldbf1Pp677f9fV689F9fL+L8vw6L9Xu3evzBKROEIVGSiY8ze48kFEArEtkagQw1EilRVbW2FImFVXSus6KqqoAaVdNIQ5MVSw1t255Xj7AcSgEpVypAcm5OkYsDjoqu5DkTcNJfXgojb0oZK4OGomh6odMfH0tYGEMEEISVubsuRq7lBkd2NhgFxGkDFAiiThxhiPNQn3ykrFMe2/tOEU9fcWN8wa/luxA3Gxb4mEKrzzGoxMmeTHpXxiPFAcv4Ysz2UNzcAil12hISgBEVbizGaFE1AjP4XqiYBwRPNRiLYYRuNUWtrKo5EiqRIiqRIigJF+9CD82yEeBKQgfRCkANgVa8Xx8AvAjRTIGgQAV5qcTMjAUTx/DJHVP05BOQlyHafRqJ4e2SQyWo1hdGtwca9CM+VVa35RhIod2wn8aRIOhO3EZPen6QK0I6ByISnEHHvfG4/XLv7ULiD7ZFendsPcxX4/O7F1+Kg2Nt+Pys7Qxb7ZeijYHP/HgAhBSlQ8Sd6bEDE5A02gLJZAMo/AAjL2RdyoGdBSjFFQf1yMNOcgZiYuYUxhXxqqIDMQMhWXJiBwAwUpluaUS25LFMSl8Gg06nHSHQenUGDqUwqbNLp5LEkG3NhujnJlPEGq74nlUFmoPTl+XNo8OgI1h4eArXRKNU+wU5ocGSbx1TNQ6MRqF2xRzAkg3GgWJeIQUo2Rhj2HAx/tCfy2Z1xHYNzCrbwMBy5b7mczTAbYysPXxXYgUkGpecf4DqPHPBk/UZoxvVQoWc7PejC3drX0RHo8BB2KIUgIjUIw0qtNY9K2CRjog0eekvNtrNbvhmg7chFD/I4W5s5kvGMOwH8bEYs7Alc4R1fAUZrMYgGmYGqKGUY4yD2w5ZndTheWp9ZDKDvy+S/uwbU64f4CG55VAvvb9ZOP78H7i7Um0ZqdY1KRgHqDyVPkcJGI5jAqVBVHGk0tQYaetIt5XgC8rnHrnazs7D+cMdFz8VIaiNFcWs0b2RAVradr7zupuNw9DuwVru7u8nBMZl4lj1zz3UiZZyx/yAZzrSITaO1urhOZNoNXbmP3rwNs3ZzE8apWKaKUhsV6VZWMGOVKs2hMt+z1qQp2poWTPeV8e342bfkFQp67HYnK/0OjOsMK4hUu7nLaYxiGoaIOrAszQhCJ1fBtj03hglgT5eWyLRb/Tx88eqhix6oLyDTJZoDCIKBGq7EIBl212gMmF6hal631Z176tQe0QZ8BRXSXc8otFN6YH805H9fuOgHwegsWzufV/IEtC8MXn0j+blLUB4uv3gTUVKJOKZekGKQDJ8B6jlEQ0lGo7NsGNdd2o9xWY4JsgdsIJNf0X11h63nzV9Aplfkw/t/LQaxwdf7Jl8F6tdw5g3lddGyrnDogst1lyylMhDXI1Buu8QmP2hV6yKceYjUYAyQanePdvk4Jks5j8sDk8pkF4zShZSvoAPapzfP+qxRt/S8jI/Qite/9KYuulqyjOLoN6I0BoMSTfIVmhe7HsIfyuezvJeU2U4pxQPn19nz76w2vyJFpDmFT8/2RNLzGrnRaCaQSIVWUlXan5ISePPck8rKv1uH+HllWIfffHgYpDXXnp9Dpqma7W3naR2q2/ydPX5Nck4Cvo3xHVlJt4aGkq6HSfHxnVmq692CK8Q5oirbTObZ6io/ZZuuQgf+haYzhqqrGRrbDBXwGehmzTVwbJkEQnv7ZquZs1nYP4lLhaGEDioQ7z/OKkiqjytwkIvSorND2fdq2Eht8xoH5Te7J2Q2CWI6GptzReHF3XUFibY/pK5uILd7gGVjc2ehSU5HIMs2rpRZ65GXb5mWjWO56flpfL5jTGZObnJkcgjyr/v/YFWUX7RkbfVZRaRUOoZ3NCnTAnzxxqAiCqOK1BUUkCcOjyno9gep9e+wH1sIBvemP7/B+rFKgCX/ojoGaI3VncXkrPZAtl2AmF7PrRVaxecoiqVZhRLr4NlnnOL53pO8fLb4wgtSc5+BiWZVWkrVyUAQ1oj1JsYOlRTELw8OvJBZZ5pYw51sS75WuRAx7m99lSeV5IsKAu1evBhuGlfcHZMb4lUWKwlTNUeByfmaCUYUcqX3wzTiReDY2NWqSIkvKc63MnkQb5camBWRGhw0GuxiG50cHmstdZa2pkRE5tf7StIU3t7pXoGZBUWOxI5/8LAgcUCSj9WvB052o5LwWBule6EqJSq8pCMA1LQU1LucaQ9f61VaNn9lZ/2TtTS+IK5SbGfEK2FfuXd0dJl/iEKCJajagiTyzpTI0bKO1if7A0A4vEBn+MkhHKyXOOSBO5BsTWdby3coAut/EnKXEw3d65dXuq7XnnHV9dzMzde3tJWsbuT1B+45rvsywF6DRxEpFYqzqJtYPHfEyqEsxJj+IUBRUpSPJTkRzmAkXy99le7tp1aDxLILTsxK0eiJZRT2Ug9+tdWRdAk4LW9sG55/uXqq9vs/Oyozowbn8pbYKZmWaTxWfKa2ZXCsIVs4Uwa+yctE0aiFwGVq5GOJ66izA6xSw7USrbXk7xszG0Hl7cmVdq2hwXHSa0G3TVMlnFjOsWj/4YyzVT1vdBwnwar9rcwMT2Rp91DmMvZ1DJ1inwnGlZJT1vHldl093l4WmvmhfU639Am/WdPoOPQHWmrGSpsuUTTUMkTZ45VjLVTqga5/8M3VPz/mYmeqyFDCXwV60vWxLxe6DSPrzErRlJ8CVSdvga0mzzTGV9DX4KuT7lnJCGNtoL/6iNVCUb19ifsDObTXlppjkX2fhWbUE2M5Lf3i6i/49JKzRT9+QXKJdzRNYcbowb93iIFZrEDxQpTP5kIMyTmOxfsrXmEkBvv5JGmieVz/vetE/DrxH1vrSptiC+VCCUUgX+RGMC+fWWIjNvHkZEoC7R8C9pllzXcmx3l09hT+bSCK7DA1sfdx0SDPnPutgeWMcoH2Yc3nJusspRq5qjn8zsLtIaPa5LNBgpJqb9B9+gmJoSpuGmWQOWdIEEQZfTu5vd3uDIOgt9SWl70PZb4Ptb7WDDNHcTQyIRFEU5tkvQylg9kp96IEC7pAPXj2Lb75eLTp6wITNOJ7azjLIv3uox0DGcsgfV+iOMAQiyaZJP5yT3gkXuUZEeE5XC88ODK9Stj1hLCTJkiY5+qaJ8SvEHBf5UXTKIx+E0VWEOTV1AadhfmB9tirdl8AxThGIMrZfgFf23N/8YD39TT2Vt9HX6mgjwlyi8VosAh6t88eo+VChhXjtK41RbjbBEHDgysBtPTib9ZbDtPvg3ofb2876x0mLqj0j4v1HCaFicV5nbFxwHCFM6Heie7uid4+EvweEvDyWHguMd6O1Zf7R8YJqApWwYeR718l+mcxfQKjvmKc8Mf6mLcWYkiP/VgmukN4kzWRxBj3nRCmM4OamSlK+pavSv3VT+QRtsV3iCaT3DNLtv7LS14luWUcbG9/T9bran/brpAnijqPF2iso3Osczj87JOXbwwpfHdyHvrdWl/m/76/1Thf2NDwnYJmPj503qfWJnXLxzt5JIrH5WAjfvcloiYenfvtDisA5YLF3+je/uPjX/3j+wsWDlK+emoShT1VTftbA0k3CO6pHxuM3ztfmakzW6+oSgro7S059afUGuO5ZWnm1wfLvXYwg9PNp1e8HA6eZt5QjY1+r7CDL89fCBZHxf7+h/FtdzxZO7c99heLStG4fwt6Nmnf92OVTxrTPgYKxmJopyj7rDy5bX57OZ01ftx34U3st4GnwSIAUCq+AgGSnZ9LRw+K6WHfU4jEfwDAz90FGAD+uQ3ogH0xnu0RCwBQjgAggLz0xycAJLCA/jjwAxHq2buXRT/wTGXAPd4AXqkchHQh9HAAuMCSIJWAMHj5wFQB+JkdEGZPQQx/seyF8MV/eBtbAPDMByFmozSAGJyb0q7dzYD4kGcQmBvKIEqnO5YkyyAr8lmGCY+IyTAnioZ0JiRWNoMgQIu78LxcQI1tIKAkZM+PD19BPJE9Aoa3j1amkUK5XhKo0tqkqITylh0TXkpl3IUSUc9D2BXpaPWcjBy91Kxahd4+RTZ78ToBzelI5XRlcYbty1VqU6fUwU/Bp8nuTyxBhgo6xGVdNLFizyWxaHGpiBFoaQpa3OmNGtjPsLOnRL7EqoprpQTtjnxtv7NYvVK1ygEVodep7DJaVOqIrcypY1uL40ShQgOq2RWLOrFWDuqWqp67UbPKYpBJnC5iUkXpTC0iarbY4GfjaATQ/z9oP4HzQ1CyjwBwCNgYpBnQqmu9K51OgVZvuOOQBgAA) format("woff2");
+  font-weight: 900; font-style: normal; font-display: swap;
+}
+:root {
+  --bg: #EEF2EE;          /* 옅은 세이지 바탕 */
+  --surface: #FFFFFF;
+  --surface-2: #F5F7F4;
+  --ink: #142B27;
+  --muted: #56655F;
+  --line: #D5DED9;
+  --brand: #0F3D38;       /* 표지 짙은 초록 */
+  --brand-ink: #F6F1E4;   /* 표지 크림 */
+  --brand-soft: #C3D6CE;  /* 표지 민트 */
+  --brand-mute: #8FB0A5;
+  --accent: #FF9466;      /* 표지 주홍 */
+  --accent-ink: #9C3D14;  /* 밝은 바탕 위 주홍 글자 */
+  --accent-soft: #FFE6DA;
+  --primary: #0F3D38;
+  --primary-ink: #F6F1E4;
+  --ok: #24724F; --ok-soft: #DCEFE4;
+  --warn: #8A5A00; --warn-soft: #FBEFD3;
+  --bad: #B03A2E; --bad-soft: #F8DFDB;
+  --shadow: 0 1px 2px rgba(15,61,56,.06), 0 4px 16px rgba(15,61,56,.06);
+  --radius: 14px;
+  --font: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", "Malgun Gothic", "Segoe UI", system-ui, sans-serif;
+  --display: "AmgiDisplay", "Noto Serif KR", "Nanum Myeongjo", "AppleMyungjo", "Batang", serif;
+  --nav-h: 62px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0A1C19; --surface: #112925; --surface-2: #0E2420; --ink: #E6EFEB; --muted: #9DB2AA;
+    --line: #23413B; --brand: #0F3D38; --brand-ink: #F6F1E4; --brand-soft: #C3D6CE; --brand-mute: #8FB0A5;
+    --accent: #FF9466; --accent-ink: #FFB592; --accent-soft: #3A2419;
+    --primary: #C3D6CE; --primary-ink: #0B2421;
+    --ok: #7FD1A4; --ok-soft: #173A2B; --warn: #F1C46B; --warn-soft: #3A2F12; --bad: #F19A8F; --bad-soft: #3D1D19;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0A1C19; --surface: #112925; --surface-2: #0E2420; --ink: #E6EFEB; --muted: #9DB2AA;
+  --line: #23413B; --brand: #0F3D38; --brand-ink: #F6F1E4; --brand-soft: #C3D6CE; --brand-mute: #8FB0A5;
+  --accent: #FF9466; --accent-ink: #FFB592; --accent-soft: #3A2419;
+  --primary: #C3D6CE; --primary-ink: #0B2421;
+  --ok: #7FD1A4; --ok-soft: #173A2B; --warn: #F1C46B; --warn-soft: #3A2F12; --bad: #F19A8F; --bad-soft: #3D1D19;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.25);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+/* Claude 미리보기 페이지의 기본 틀과 똑같이, 휴대폰 위아래 안전 구역만큼 문서를 띄운다 (앱 주소에서도 같은 모양) */
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+html, body { height: 100%; }
+html.is-welcome body { background: var(--brand); }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--font); font-size: 16px; line-height: 1.55;
+  word-break: keep-all; overflow-wrap: anywhere;
+  -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--brand); }
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: inherit; }
+h1, h2, h3 { line-height: 1.3; text-wrap: balance; margin: 0; }
+p { margin: 0; }
+.vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+
+.app { max-width: 560px; margin: 0 auto; min-height: 100%; position: relative; }
+
+/* ---------- 위 띠 ---------- */
+.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: var(--brand); color: var(--brand-ink);
+}
+.top-in {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding-block: 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  min-height: 56px;
+}
+.brand { display: flex; align-items: baseline; gap: 8px; text-decoration: none; min-width: 0; }
+.wm { font-family: var(--display); font-weight: 900; font-size: 22px; letter-spacing: -0.02em; white-space: nowrap; }
+.wm b { color: var(--accent); font-weight: 900; }
+.wm-sub { font-size: 12px; color: var(--brand-soft); letter-spacing: .04em; white-space: nowrap; }
+.dday { display: flex; flex-direction: column; align-items: flex-end; min-width: 0; text-decoration: none; }
+.dday-n { font-family: var(--display); font-weight: 900; font-size: 20px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.dday-l { font-size: 11.5px; color: var(--brand-soft); max-width: 46vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ---------- 본문 ---------- */
+.view {
+  padding-top: 18px; padding-bottom: calc(var(--nav-h) + 28px + env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 16px;
+}
+.view.no-nav { padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px)); }
+.h1 { font-size: 23px; font-weight: 800; letter-spacing: -0.01em; }
+.h2 { font-size: 18px; font-weight: 800; }
+.h3 { font-size: 15.5px; font-weight: 800; }
+.sub { color: var(--muted); font-size: 14.5px; }
+.small { font-size: 13.5px; color: var(--muted); }
+.eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .06em; color: var(--accent-ink); }
+.stack { display: flex; flex-direction: column; gap: 10px; }
+.stack-lg { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.grow { flex: 1 1 auto; min-width: 0; }
+.center { text-align: center; }
+.num { font-variant-numeric: tabular-nums; }
+
+.card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow);
+}
+.card.flat { box-shadow: none; }
+.card.soft { background: var(--surface-2); box-shadow: none; }
+.card-h { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+
+/* ---------- 버튼 ---------- */
+.btn {
+  appearance: none; border: 1px solid transparent; border-radius: 12px; cursor: pointer;
+  min-height: 44px; padding: 10px 16px; font-weight: 700; font-size: 15.5px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; text-align: center;
+  background: var(--surface-2); color: var(--ink); border-color: var(--line);
+  transition: transform .06s ease, background-color .15s ease;
+}
+.btn:active { transform: scale(.98); }
+.btn-primary { background: var(--primary); color: var(--primary-ink); border-color: var(--primary); }
+.btn-accent { background: var(--accent); color: #2B1408; border-color: var(--accent); }
+.btn-ghost { background: transparent; border-color: var(--line); }
+.btn-text { background: transparent; border-color: transparent; color: var(--accent-ink); padding-inline: 8px; min-height: 40px; }
+.btn-bad { background: var(--bad-soft); color: var(--bad); border-color: transparent; }
+.btn-block { width: 100%; }
+.btn-lg { min-height: 54px; font-size: 17px; border-radius: 14px; }
+.btn-sm { min-height: 36px; padding: 6px 12px; font-size: 14px; border-radius: 10px; }
+.btn[disabled] { opacity: .45; cursor: default; }
+
+/* ---------- 칩과 상태 ---------- */
+.chip { display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 999px; font-size: 12.5px; font-weight: 700; background: var(--surface-2); border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+.pill { display: inline-flex; align-items: center; gap: 4px; padding: 2px 9px; border-radius: 999px; font-size: 12.5px; font-weight: 800; white-space: nowrap; }
+.pill-today { background: var(--accent-soft); color: var(--accent-ink); }
+.pill-late { background: var(--bad-soft); color: var(--bad); }
+.pill-done { background: var(--ok-soft); color: var(--ok); }
+.pill-next { background: var(--surface-2); color: var(--muted); border: 1px solid var(--line); }
+.pill-skip { background: transparent; color: var(--muted); border: 1px dashed var(--line); }
+.star { color: var(--accent-ink); font-weight: 900; }
+
+/* ---------- 배너 ---------- */
+.banner { border-radius: 12px; padding: 12px 14px; font-size: 14.5px; display: flex; gap: 10px; align-items: flex-start; }
+.banner .grow { display: flex; flex-direction: column; gap: 6px; }
+.banner-info { background: var(--surface-2); border: 1px solid var(--line); }
+.banner-warn { background: var(--warn-soft); color: var(--warn); }
+.banner-warn b, .banner-info b { color: var(--ink); }
+.banner-accent { background: var(--accent-soft); color: var(--accent-ink); }
+.banner .x { background: none; border: 0; color: inherit; font-size: 20px; line-height: 1; cursor: pointer; padding: 2px 4px; min-height: 0; }
+
+/* ---------- 오늘의 처방 목록 ---------- */
+.rx-list { display: flex; flex-direction: column; gap: 10px; }
+.rx {
+  display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; box-shadow: var(--shadow);
+}
+.rx.late { border-left: 4px solid var(--bad); }
+.rx.today { border-left: 4px solid var(--accent); }
+.rx-main { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.rx-title { font-weight: 800; font-size: 16.5px; }
+.rx-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 13.5px; color: var(--muted); }
+.rx-dose { font-size: 13px; color: var(--muted); }
+.rx-dose b { color: var(--ink); font-weight: 700; }
+
+.empty { text-align: center; padding: 22px 12px; display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.empty .big { font-family: var(--display); font-weight: 900; font-size: 30px; color: var(--brand-mute); }
+
+/* ---------- 7일 예보 ---------- */
+.bars { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; align-items: end; height: 120px; padding-top: 6px; }
+.bar { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 4px; height: 100%; min-width: 0; }
+.bar i { display: block; width: 100%; max-width: 34px; border-radius: 6px 6px 2px 2px; background: var(--brand-soft); min-height: 3px; }
+.bar.over i { background: var(--accent); }
+.bar.zero i { background: var(--line); }
+.bar .v { font-size: 12px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.bar .d { font-size: 12px; color: var(--muted); }
+.bar.is-today .d { color: var(--ink); font-weight: 800; }
+.budget-line { font-size: 12.5px; color: var(--muted); }
+
+/* ---------- 목록 ---------- */
+.list { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.li { display: flex; align-items: center; gap: 12px; padding: 13px 14px; border-top: 1px solid var(--line); text-decoration: none; color: inherit; background: none; border-left: 0; border-right: 0; border-bottom: 0; width: 100%; text-align: left; cursor: pointer; min-height: 52px; }
+.li:first-child { border-top: 0; }
+.li .grow { display: flex; flex-direction: column; gap: 2px; }
+.li .t { font-weight: 700; }
+.li .s { font-size: 13.5px; color: var(--muted); }
+.li .chev { color: var(--muted); font-size: 18px; }
+.group-h { font-size: 13px; font-weight: 800; color: var(--muted); letter-spacing: .04em; padding: 4px 2px; }
+
+.dots { display: inline-flex; gap: 4px; align-items: center; }
+.dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--line); display: inline-block; }
+.dots i.on { background: var(--ok); }
+.dots i.due { background: var(--accent); }
+.dots i.late { background: var(--bad); }
+.dots i.skip { background: transparent; border: 1px dashed var(--line); }
+
+/* ---------- 단원 타임라인 ---------- */
+.tl { display: flex; flex-direction: column; gap: 0; }
+.tl-i { display: grid; grid-template-columns: 22px 1fr auto; gap: 10px; align-items: start; padding: 10px 0; position: relative; }
+.tl-i::before { content: ""; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: var(--line); }
+.tl-i:first-child::before { top: 18px; }
+.tl-i:last-child::before { bottom: calc(100% - 18px); }
+.tl-dot { width: 22px; height: 22px; border-radius: 50%; background: var(--surface); border: 2px solid var(--line); position: relative; z-index: 1; display: grid; place-items: center; font-size: 12px; font-weight: 900; }
+.tl-i.done .tl-dot { background: var(--ok); border-color: var(--ok); color: var(--surface); }
+.tl-i.due .tl-dot { border-color: var(--accent); background: var(--accent-soft); }
+.tl-i.late .tl-dot { border-color: var(--bad); background: var(--bad-soft); }
+.tl-i .grow { display: flex; flex-direction: column; gap: 2px; }
+.tl-i .t { font-weight: 700; }
+.tl-i .s { font-size: 13.5px; color: var(--muted); }
+
+/* ---------- 폼 ---------- */
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label, .lbl { font-weight: 700; font-size: 14.5px; }
+.input, .field input[type=text], .field input[type=date], .field input[type=time], .field input[type=number], .field select, .field textarea, textarea.input {
+  width: 100%; min-height: 46px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink); font-size: 16px;
+}
+textarea.input, .field textarea { min-height: 110px; resize: vertical; line-height: 1.5; }
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; cursor: pointer; }
+.check input { width: 22px; height: 22px; margin: 1px 0 0; accent-color: var(--brand); flex: none; }
+.hint { font-size: 13.5px; color: var(--muted); }
+.err { font-size: 13.5px; color: var(--bad); font-weight: 700; }
+.seg { display: flex; flex-wrap: wrap; gap: 8px; }
+.seg button { min-height: 40px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-weight: 700; cursor: pointer; font-size: 14.5px; }
+.seg button[aria-pressed="true"] { background: var(--primary); color: var(--primary-ink); border-color: var(--primary); }
+.stepper { display: flex; align-items: center; gap: 12px; }
+.stepper button { width: 48px; height: 48px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); font-size: 22px; font-weight: 800; cursor: pointer; }
+.stepper input { width: 90px; text-align: center; font-family: var(--display); font-weight: 900; font-size: 30px; min-height: 54px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+.plan { background: var(--surface-2); border: 1px dashed var(--brand-mute); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 8px; font-size: 14.5px; }
+.plan-row { display: grid; grid-template-columns: 64px 1fr; gap: 8px; }
+.plan-row b { color: var(--accent-ink); }
+.plan-row.skip span { color: var(--muted); text-decoration: line-through; }
+
+/* ---------- 탭 막대 ---------- */
+.tabs {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 25;
+  background: var(--surface); border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.tabs-in { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); height: var(--nav-h); }
+.tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-decoration: none; color: var(--muted); font-size: 12px; font-weight: 700; position: relative; }
+.tab svg { width: 24px; height: 24px; }
+.tab[aria-current="page"] { color: var(--ink); }
+.tab[aria-current="page"]::after { content: ""; position: absolute; top: 0; left: 30%; right: 30%; height: 3px; border-radius: 0 0 3px 3px; background: var(--accent); }
+.tab .badge { position: absolute; top: 6px; left: calc(50% + 6px); min-width: 18px; height: 18px; border-radius: 9px; background: var(--accent); color: #2B1408; font-size: 11px; font-weight: 900; display: grid; place-items: center; padding: 0 4px; }
+
+/* ---------- 아래에서 올라오는 창 ---------- */
+.backdrop { position: fixed; inset: 0; background: rgba(5,20,18,.45); z-index: 40; }
+.sheet {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 41; max-height: 92%; overflow-y: auto; overscroll-behavior: contain;
+  background: var(--surface); border-radius: 20px 20px 0 0; box-shadow: 0 -8px 30px rgba(0,0,0,.18);
+  max-width: 560px; margin: 0 auto;
+}
+.sheet-in {
+  padding-top: 10px; padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 14px;
+}
+.grab { width: 40px; height: 5px; border-radius: 3px; background: var(--line); margin: 0 auto 2px; }
+.sheet-h { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.icon-btn { width: 40px; height: 40px; border-radius: 10px; border: 0; background: var(--surface-2); color: var(--ink); cursor: pointer; font-size: 20px; display: grid; place-items: center; flex: none; }
+
+/* ---------- 복습 진행 화면 ---------- */
+.session { position: fixed; inset: 0; z-index: 35; background: var(--bg); overflow-y: auto; overscroll-behavior: contain; }
+.session-top { position: sticky; top: 0; z-index: 2; background: var(--brand); color: var(--brand-ink); padding-top: env(safe-area-inset-top, 0px); }
+.session-top-in { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; gap: 8px; padding-block: 8px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.session-top .icon-btn { background: rgba(255,255,255,.1); color: var(--brand-ink); }
+.session-title { text-align: center; min-width: 0; }
+.session-title .t { font-weight: 800; font-size: 15.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.session-title .s { font-size: 12px; color: var(--brand-soft); }
+.steps { display: flex; gap: 6px; justify-content: center; padding-bottom: 10px; }
+.steps i { width: 26px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.22); }
+.steps i.on { background: var(--accent); }
+.session-body { max-width: 560px; margin: 0 auto; padding-top: 20px; padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px)); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 16px; }
+.step-no { font-size: 12.5px; font-weight: 800; color: var(--accent-ink); letter-spacing: .05em; }
+.tips { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; font-size: 14.5px; }
+
+.timer { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 18px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.timer-n { font-family: var(--display); font-weight: 900; font-size: 64px; line-height: 1; letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+.timer-bar { width: 100%; height: 8px; border-radius: 4px; background: var(--surface-2); overflow: hidden; border: 1px solid var(--line); }
+.timer-bar i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .25s linear; }
+.timer-note { font-size: 14px; color: var(--muted); min-height: 1.5em; text-align: center; }
+.timer.hold .timer-note { color: var(--accent-ink); font-weight: 700; }
+.timer.done .timer-n { color: var(--ok); }
+
+.flash { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 20px 18px; display: flex; flex-direction: column; gap: 14px; min-height: 280px; box-shadow: var(--shadow); }
+.flash-meta { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); gap: 8px; }
+.flash-q { font-size: 21px; font-weight: 800; line-height: 1.45; white-space: pre-wrap; }
+.flash-a { font-size: 18.5px; line-height: 1.5; padding: 14px; border-radius: 12px; background: var(--ok-soft); white-space: pre-wrap; }
+.flash-gap { flex: 1; }
+.need { display: inline-flex; gap: 4px; }
+.need i { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--brand-mute); }
+.need i.on { background: var(--ok); border-color: var(--ok); }
+
+.rate { display: flex; flex-direction: column; gap: 10px; }
+.rate button { text-align: left; display: flex; flex-direction: column; gap: 2px; align-items: flex-start; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; min-height: 64px; }
+.rate button b { font-size: 16.5px; }
+.rate button span { font-size: 13.5px; color: var(--muted); }
+.rate button.r-easy { border-left: 5px solid var(--ok); }
+.rate button.r-ok { border-left: 5px solid var(--brand-mute); }
+.rate button.r-hard { border-left: 5px solid var(--accent); }
+.rate button.r-blank { border-left: 5px solid var(--bad); }
+
+.big-done { text-align: center; display: flex; flex-direction: column; gap: 8px; align-items: center; padding: 12px 0; }
+.big-done .mark { width: 64px; height: 64px; border-radius: 50%; background: var(--ok-soft); color: var(--ok); display: grid; place-items: center; font-size: 32px; font-weight: 900; }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; font-size: 15px; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; font-weight: 700; }
+
+/* ---------- 달력 ---------- */
+.cal-h { display: flex; align-items: center; justify-content: space-between; }
+.cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.cal .wd { text-align: center; font-size: 12px; font-weight: 700; color: var(--muted); padding: 2px 0; }
+.cal .wd.sun { color: var(--bad); }
+.cal .wd.sat { color: #3C6FB0; }
+.day { aspect-ratio: 1 / 1.08; min-width: 0; max-width: 100%; border-radius: 10px; border: 1px solid transparent; background: var(--surface); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 2px; padding: 5px 2px; cursor: pointer; font-size: 13.5px; font-variant-numeric: tabular-nums; position: relative; color: var(--ink); }
+.day.out { opacity: .35; }
+.day.is-today { border-color: var(--accent); }
+.day.sel { outline: 2px solid var(--brand); outline-offset: -2px; }
+.day.final { background: var(--accent-soft); }
+.day.exam { background: var(--brand); color: var(--brand-ink); }
+.day .n { font-weight: 700; }
+.day .c { font-size: 11px; font-weight: 800; border-radius: 6px; padding: 0 5px; background: var(--brand-soft); color: #0F3D38; }
+.day .c.late { background: var(--bad-soft); color: var(--bad); }
+.day .c.done { background: var(--ok-soft); color: var(--ok); }
+.day .ex { font-size: 10.5px; font-weight: 900; }
+.legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: 12.5px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.legend i { width: 12px; height: 12px; border-radius: 4px; display: inline-block; }
+
+/* ---------- 표 ---------- */
+.tbl-wrap { overflow-x: auto; }
+table.tbl { border-collapse: collapse; width: 100%; font-size: 14px; }
+.tbl th, .tbl td { border-bottom: 1px solid var(--line); padding: 8px 6px; text-align: left; vertical-align: top; }
+.tbl th { font-size: 12.5px; color: var(--muted); font-weight: 800; }
+.tbl td:nth-child(-n+3), .tbl th { white-space: nowrap; }
+@media (max-width: 360px) { .tbl th, .tbl td { padding: 8px 4px; } table.tbl { font-size: 13.5px; } }
+
+/* ---------- 알림 줄(토스트) ---------- */
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(var(--nav-h) + 16px + env(safe-area-inset-bottom, 0px)); z-index: 60; background: var(--ink); color: var(--bg); padding: 11px 16px; border-radius: 12px; font-size: 14.5px; font-weight: 700; max-width: min(92vw, 520px); box-shadow: 0 6px 20px rgba(0,0,0,.25); text-align: center; }
+
+/* ---------- 처음 화면 ---------- */
+.welcome { min-height: 100%; background: var(--brand); color: var(--brand-ink); display: flex; flex-direction: column; }
+.welcome-in { max-width: 560px; margin: 0 auto; width: 100%; padding-top: 36px; padding-bottom: 28px; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 22px; flex: 1; }
+.welcome .eyebrow { color: #FFA07E; }
+.welcome h1 { font-family: var(--display); font-weight: 900; font-size: 56px; line-height: 1.12; letter-spacing: -0.02em; }
+.welcome h1 b { color: var(--accent); font-weight: 900; }
+.welcome .lead { color: var(--brand-soft); font-size: 16.5px; }
+.welcome .lead b { color: var(--brand-ink); }
+.motif { display: flex; flex-direction: column; gap: 8px; }
+.motif .lab { font-size: 12.5px; color: var(--brand-mute); font-weight: 700; }
+.motif .mrow { display: grid; grid-template-columns: 1fr 44px; gap: 10px; align-items: center; font-size: 14px; }
+.motif .track { height: 8px; border-radius: 4px; background: rgba(255,255,255,.1); overflow: hidden; margin-top: 4px; }
+.motif .track i { display: block; height: 100%; border-radius: 4px; }
+.motif .src { font-size: 11.5px; color: var(--brand-mute); }
+.welcome .points { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.welcome .points li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; font-size: 15.5px; }
+.welcome .points li span { font-family: var(--display); font-weight: 900; color: var(--accent); font-size: 17px; }
+.welcome .btn-primary { background: var(--accent); color: #2B1408; border-color: var(--accent); }
+.welcome .btn-ghost { color: var(--brand-ink); border-color: rgba(246,241,228,.35); }
+.welcome .card { background: var(--surface); color: var(--ink); }
+.welcome .by { font-size: 12.5px; color: var(--brand-mute); display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+@media (min-width: 600px) {
+  .app { box-shadow: 0 0 0 1px var(--line); min-height: 100vh; background: var(--bg); }
+}
+
+</style>
+</head>
+<body>
+<div id="root"><noscript><p style="padding:24px">이 앱은 자바스크립트가 켜져 있어야 열려요.</p></noscript></div>
+<script>
+/* 암기 처방전 복습 앱 — 복습 날짜 계산 엔진
+ * 책 「암기 처방전」 5장 "남은 날로 정하는 복습 간격표"와
+ * 부록 엑셀 "복습 날짜 계산기"(간격표 시트)의 규칙을 그대로 옮겼다.
+ * 날짜는 모두 'YYYY-MM-DD' 문자열(기기 현지 날짜)로 다룬다.
+ * 이 파일은 브라우저(window.AmgiEngine)와 Node(require) 양쪽에서 쓴다.
+ */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.AmgiEngine = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+
+  // ---- 간격표 (책 5장, 계산기 '간격표' 시트와 같은 값) ----
+  // min: 처음 공부한 날부터 시험까지 남은 날이 이 값 이상이면 이 줄 (계산기 B열)
+  // r1, r2: 첫 공부 뒤 며칠 (C, D열) / r3: 첫 공부 뒤 며칠, 0이면 시험 며칠 전 기준만 (E열)
+  // r3Before: 3차 복습은 늦어도 시험 며칠 전 (F열)
+  var ROWS = [
+    { id: '2w', label: '2주', min: 1, r1: 3, r2: 7, r3: 0, r3Before: 1, text: '3일 뒤 · 7일 뒤 · 시험 전날' },
+    { id: '1m', label: '1개월', min: 22, r1: 7, r2: 14, r3: 0, r3Before: 3, text: '1주 뒤 · 2주 뒤 · 시험 3일 전' },
+    { id: '3m', label: '3개월', min: 61, r1: 14, r2: 35, r3: 63, r3Before: 3, text: '2주 뒤 · 5주 뒤 · 9주 뒤' },
+    { id: '6m', label: '6개월', min: 136, r1: 21, r2: 60, r3: 120, r3Before: 3, text: '3주 뒤 · 2개월 뒤 · 4개월 뒤' },
+    { id: '1y', label: '1년', min: 271, r1: 30, r2: 90, r3: 210, r3Before: 3, text: '1개월 뒤 · 3개월 뒤 · 7개월 뒤' }
+  ];
+  var FINAL_DAYS = 14; // 총복습: 시험 14일 전부터 (책 13장, 계산기 B11)
+
+  // 복습 날 "얼마나 떠올랐나요"에 따른 다음 간격 배수.
+  // 책 5장 "복습이 밀렸을 때": 술술 나오면 늘리고, 3분의 1도 안 나오면 줄이고,
+  // 거의 아무것도 안 떠오르면 첫 공부로 돌아가요. 배수(1.5, 0.7)는 책에 숫자가 없어 앱이 정한 값.
+  var FACTORS = { easy: 1.5, ok: 1, hard: 0.7 };
+
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function toUTC(s) {
+    var p = s.split('-');
+    return Date.UTC(+p[0], +p[1] - 1, +p[2]);
+  }
+  function fromUTC(ms) {
+    var d = new Date(ms);
+    return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate());
+  }
+  function addDays(s, n) { return fromUTC(toUTC(s) + n * 86400000); }
+  function diffDays(a, b) { return Math.round((toUTC(a) - toUTC(b)) / 86400000); } // a - b
+  function isDate(s) {
+    if (typeof s !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+    return fromUTC(toUTC(s)) === s;
+  }
+  function minD(a, b) { return a < b ? a : b; }
+
+  function rowById(id) {
+    for (var i = 0; i < ROWS.length; i++) if (ROWS[i].id === id) return ROWS[i];
+    return null;
+  }
+  // 계산기 M열: MATCH(남은 날, 간격표 B5:B9, 1)
+  function pickRow(daysLeft) {
+    if (!(daysLeft >= 1)) return null;
+    var row = ROWS[0];
+    for (var i = 0; i < ROWS.length; i++) if (daysLeft >= ROWS[i].min) row = ROWS[i];
+    return row;
+  }
+  function plannedOffset(row, j) {
+    if (j === 0) return 0;
+    if (j === 1) return row.r1;
+    if (j === 2) return row.r2;
+    return row.r3 || null; // 0이면 시험 기준으로 고정된 3차
+  }
+
+  /* fromK(0 = 첫 공부, 1~3 = n차 복습)를 날짜 D에 마쳤을 때, 그 뒤 복습 날짜를 다시 잡는다.
+   * factor는 바로 다음 간격 하나에만 곱한다. 그다음 간격은 간격표의 계획 간격을 그대로 쓴다.
+   * 건너뛰는 규칙은 계산기와 같다.
+   *   1·2차: 날짜가 시험 날짜와 같거나 그 뒤면 건너뜀 (계산기 E·F열)
+   *   3차: min(앞 복습 + 계획 간격, 시험 r3Before일 전). 앞 복습 날짜와 같거나 그 앞이면 건너뜀 (G·N열)
+   * 반환: [fromK+1차 날짜, ..., 3차 날짜] (건너뛰면 null)
+   */
+  function chain(row, exam, fromK, D, factor) {
+    var out = [];
+    var prevDate = D;
+    var prevOff = plannedOffset(row, fromK);
+    if (prevOff === null) prevOff = 0;
+    for (var j = fromK + 1; j <= 3; j++) {
+      var anchored = (j === 3 && !row.r3);
+      var cand;
+      if (anchored) {
+        cand = addDays(exam, -row.r3Before);
+      } else {
+        var gap = plannedOffset(row, j) - prevOff;
+        if (j === fromK + 1 && factor && factor !== 1) gap = Math.max(1, Math.round(gap * factor));
+        cand = addDays(prevDate, gap);
+        if (j === 3) cand = minD(cand, addDays(exam, -row.r3Before));
+      }
+      var ok = (j < 3) ? (cand < exam && cand > prevDate) : (cand > prevDate && cand < exam);
+      if (ok) {
+        out.push(cand);
+        prevDate = cand;
+        if (!anchored) prevOff = plannedOffset(row, j);
+      } else {
+        out.push(null);
+      }
+    }
+    return out;
+  }
+
+  // 첫 공부 날짜와 시험 날짜로 처음 계획을 세운다 (계산기 한 줄과 같은 결과).
+  function planFrom(first, exam) {
+    if (!isDate(first) || !isDate(exam)) return { ok: false, reason: 'date' };
+    var days = diffDays(exam, first);
+    var row = pickRow(days);
+    if (!row) return { ok: false, reason: 'exam-not-after-first', days: days };
+    var reviews = chain(row, exam, 0, first, 1);
+    return { ok: true, row: row.id, days: days, reviews: reviews, finalStart: finalStartFor(first, exam) };
+  }
+
+  // 계산기 H열: 시험 14일 전이 첫 공부보다 뒤면 그날부터 총복습, 아니면 해당 없음
+  function finalStartFor(first, exam) {
+    var s = addDays(exam, -FINAL_DAYS);
+    return s > first ? s : null;
+  }
+
+  // ---- 단원(unit) 상태를 다루는 함수 ----
+  function newReviews(dates) {
+    return dates.map(function (d) { return { due: d, done: null, rating: null, manual: false }; });
+  }
+
+  function nextPending(unit) {
+    for (var j = 1; j <= 3; j++) {
+      var r = unit.reviews[j - 1];
+      if (r && r.due && !r.done) return j;
+    }
+    return 0;
+  }
+  function lastDone(unit) {
+    var k = 0, d = unit.first;
+    for (var j = 1; j <= 3; j++) {
+      var r = unit.reviews[j - 1];
+      if (r && r.done) { k = j; d = r.done; }
+    }
+    return { k: k, date: d };
+  }
+
+  // 복습 k를 날짜 D에 마쳤을 때 (rating: easy | ok | hard | blank)
+  function completeReview(unit, k, D, rating, exam) {
+    var r = unit.reviews[k - 1];
+    r.done = D; r.rating = rating; r.manual = false;
+    if (rating === 'blank') { restart(unit, D, exam); return { restarted: true }; }
+    unit.lastFactor = FACTORS[rating] || 1;
+    var row = rowById(unit.row);
+    var next = chain(row, exam, k, D, unit.lastFactor);
+    for (var j = k + 1; j <= 3; j++) {
+      unit.reviews[j - 1] = { due: next[j - k - 1], done: null, rating: null, manual: false };
+    }
+    return { restarted: false };
+  }
+
+  // 첫 공부로 돌아가기: 오늘을 새 첫 공부 날로 보고 간격표를 다시 고른다.
+  function restart(unit, D, exam) {
+    unit.restarts = (unit.restarts || 0) + 1;
+    unit.first = D;
+    var p = planFrom(D, exam);
+    unit.row = p.ok ? p.row : unit.row;
+    unit.reviews = newReviews(p.ok ? p.reviews : [null, null, null]);
+    unit.lastFactor = 1;
+    unit.finalDone = null;
+    unit.invalid = !p.ok;
+  }
+
+  // 복습 날짜를 직접 옮기기 (밀리거나 당길 때). 그 뒤 복습은 옮긴 날에 마친다고 보고 다시 잡는다.
+  function moveReview(unit, k, newDate, exam) {
+    unit.reviews[k - 1].due = newDate;
+    unit.reviews[k - 1].manual = true;
+    var row = rowById(unit.row);
+    var next = chain(row, exam, k, newDate, 1);
+    for (var j = k + 1; j <= 3; j++) {
+      unit.reviews[j - 1] = { due: next[j - k - 1], done: null, rating: null, manual: false };
+    }
+  }
+
+  // 시험 날짜가 바뀌었을 때: 줄을 다시 고르고, 마친 복습은 두고 남은 복습만 다시 잡는다.
+  function recompute(unit, exam) {
+    var days = diffDays(exam, unit.first);
+    var row = pickRow(days);
+    if (!row) {
+      unit.invalid = true;
+      for (var j0 = 1; j0 <= 3; j0++) {
+        var r0 = unit.reviews[j0 - 1];
+        if (!r0.done) unit.reviews[j0 - 1] = { due: null, done: null, rating: null, manual: false };
+      }
+      return;
+    }
+    unit.invalid = false;
+    unit.row = row.id;
+    var ld = lastDone(unit);
+    var factor = ld.k === 0 ? 1 : (unit.lastFactor || 1);
+    var next = chain(row, exam, ld.k, ld.date, factor);
+    for (var j = ld.k + 1; j <= 3; j++) {
+      unit.reviews[j - 1] = { due: next[j - ld.k - 1], done: null, rating: null, manual: false };
+    }
+  }
+
+  return {
+    ROWS: ROWS, FINAL_DAYS: FINAL_DAYS, FACTORS: FACTORS,
+    addDays: addDays, diffDays: diffDays, isDate: isDate, toUTC: toUTC, fromUTC: fromUTC,
+    rowById: rowById, pickRow: pickRow, chain: chain, planFrom: planFrom, finalStartFor: finalStartFor,
+    newReviews: newReviews, nextPending: nextPending, lastDone: lastDone,
+    completeReview: completeReview, restart: restart, moveReview: moveReview, recompute: recompute
+  };
+});
+
+</script>
+<script>
+window.AMGI_CONFIG = {"appUrl": "https://first-best.github.io/amgi-rx/", "bookUrl": "", "sw": true};
+</script>
+<script>
+/* 암기 처방전 복습 앱 — 화면과 저장
+ * 기록은 이 기기의 브라우저 저장소(localStorage)에만 둔다. 서버로 보내는 것은 없다.
+ * 날짜 계산은 engine.js(AmgiEngine)가 맡는다.
+ */
+(function () {
+  'use strict';
+  var E = window.AmgiEngine;
+  var CFG = window.AMGI_CONFIG || {};
+  var VERSION = '1.0.0';
+  var KEY = 'amgirx.v1';
+  var IN_FRAME = (function () { try { return window.self !== window.top; } catch (e) { return true; } })();
+  var UA = navigator.userAgent || '';
+  var IS_IOS = /iPad|iPhone|iPod/.test(UA) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var IS_ANDROID = /Android/i.test(UA);
+  var IS_KAKAO = /KAKAOTALK/i.test(UA);
+  var IN_APP = IS_KAKAO || /NAVER\(inapp|Instagram|FBAN|FBAV|Line\/|Barcelona|DaumApps|everytimeApp|; wv\)/i.test(UA);
+  var WD = ['일', '월', '화', '수', '목', '금', '토'];
+  var EST = { 1: 15, 2: 10, 3: 5 };          // 복습 한 번에 드는 어림 시간(분). 책 5장 "단원마다 10분에서 20분", 13장 "10분 → 5분"을 보고 앱이 정한 값
+  var MARKS = [
+    { id: '몰', label: '몰랐어요', todo: '교재에서 찾아 읽고 카드로 만들어요' },
+    { id: '헷', label: '헷갈렸어요', todo: '헷갈린 짝을 나란히 적어요 (책 7장)' },
+    { id: '읽', label: '잘못 읽었어요', todo: '문제의 끝말에 밑줄 치는 습관을 들여요' },
+    { id: '시', label: '시간이 모자랐어요', todo: '시간을 재고 푸는 연습을 늘려요' }
+  ];
+  var RATINGS = [
+    { id: 'easy', cls: 'r-easy', label: '술술 다 나왔어요', note: '다음 복습을 조금 늦춰요 (다음 간격 1.5배)' },
+    { id: 'ok', cls: 'r-ok', label: '3분의 1 넘게 나왔어요', note: '그대로 가요. 절반이 안 돼도 정상이에요' },
+    { id: 'hard', cls: 'r-hard', label: '3분의 1도 안 나왔어요', note: '다음 복습을 조금 당겨요 (다음 간격 0.7배)' },
+    { id: 'blank', cls: 'r-blank', label: '거의 아무것도 안 떠올랐어요', note: '첫 공부로 돌아가요. 오늘 다시 읽고, 덮고, 써요' }
+  ];
+  var DIAG = [
+    ['가1', '공부 시간의 대부분을 책이나 강의를 다시 보는 데 써요'],
+    ['가2', '밑줄과 형광펜은 많은데, 책을 덮으면 무슨 내용이었는지 말하기 어려워요'],
+    ['가3', '문제는 진도를 다 나간 뒤에 풀려고 아껴 둬요'],
+    ['나1', '한 단원을 하루에 끝내고, 그 단원은 한참 뒤에야 다시 봐요'],
+    ['나2', '시험 직전 며칠에 가장 많이 외워요'],
+    ['나3', '복습할 날짜를 미리 정해 둔 적이 없어요'],
+    ['다1', '따로 보면 아는데, 비슷한 개념 두 개가 같이 나오면 헷갈려요'],
+    ['다2', '단원별 문제는 잘 푸는데, 섞여 나오는 모의고사에서는 점수가 떨어져요'],
+    ['다3', '숫자와 기간이 서로 바뀌어 기억나요. 며칠인지, 몇 년인지요'],
+    ['라1', '이유를 모르는 채로 통째로 외우는 내용이 많아요'],
+    ['라2', '순서가 있는 목록(절차, 단계, 분류)에서 한두 개를 자주 빠뜨려요'],
+    ['라3', '외울 때는 여러 번 읽거나 여러 번 쓰는 방법만 써요'],
+    ['마1', '시험 전 주에는 잠을 줄여서 공부 시간을 만들어요'],
+    ['마2', '오후 늦게나 밤에도 커피나 에너지 음료를 마셔요'],
+    ['마3', '책상에 앉으면 졸려서 같은 줄을 여러 번 읽어요']
+  ];
+  var DIAG_GROUPS = [
+    { id: '가', name: '넣기만 하는 공부', why: '꺼내는 연습이 없어요', rx: '책 3장 백지 인출, 4장 질문 카드, 6장 문제 먼저', app: '이 앱의 "덮고 꺼내기"와 질문 카드를 날마다 써요' },
+    { id: '나', name: '몰아서 하는 공부', why: '복습 간격이 없어요', rx: '책 5장 간격 복습, 13장 4주 계획표', app: '공부한 날마다 단원을 넣으면 이 앱이 복습 날짜를 잡아 줘요' },
+    { id: '다', name: '섞이는 기억', why: '구별하는 연습이 없어요', rx: '책 7장 섞어 풀기, 10장 그리기와 표', app: '오답 기록에서 "헷"이 많은지 봐요' },
+    { id: '라', name: '고리 없는 암기', why: '떠올릴 단서가 없어요', rx: '책 8장 "왜?" 묻기, 9장 기억술', app: '"왜?"를 묻는 카드를 섞어 만들어요' },
+    { id: '마', name: '몸이 버티지 못하는 공부', why: '잠과 몸이 받쳐 주지 못해요', rx: '책 11장 잠과 몸, 12장 처방하지 않는 것', app: '복습 시간을 늘리려고 잠을 줄이지 않아요' }
+  ];
+  var ICS_PRESETS = ['07:00', '12:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
+
+  // ================= 작은 도구 =================
+  function $(sel, el) { return (el || document).querySelector(sel); }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function uid() { return Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-4); }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function today() {
+    if (window.__AMGI_TODAY__) return window.__AMGI_TODAY__;
+    var d = new Date();
+    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  }
+  function wd(s) { return new Date(E.toUTC(s)).getUTCDay(); }
+  function md(s) { var p = s.split('-'); return (+p[1]) + '월 ' + (+p[2]) + '일'; }
+  function mdw(s) { return md(s) + '(' + WD[wd(s)] + ')'; }
+  function ymd(s) { var p = s.split('-'); return p[0] + '년 ' + (+p[1]) + '월 ' + (+p[2]) + '일'; }
+  function rel(s) {
+    var d = E.diffDays(s, today());
+    if (d === 0) return '오늘';
+    if (d === 1) return '내일';
+    if (d === 2) return '모레';
+    if (d === -1) return '어제';
+    return d > 0 ? d + '일 뒤' : (-d) + '일 전';
+  }
+  function shuffle(a) {
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  function cmpKo(a, b) { return String(a).localeCompare(String(b), 'ko'); }
+
+  // ================= 저장 =================
+  var data = null;
+  var storageOK = true;
+  function blank() {
+    return {
+      schema: 1, exam: null, units: [], wrongs: [], diags: [],
+      settings: { budget: 20, remind: '20:00', recall: 5, sound: true },
+      meta: { created: today(), sample: false, dismissed: {}, welcomeDone: false }
+    };
+  }
+  function normalize(d) {
+    if (!d || d.schema !== 1 || !Array.isArray(d.units)) return null;
+    var b = blank();
+    d.settings = Object.assign(b.settings, d.settings || {});
+    d.meta = Object.assign(b.meta, d.meta || {});
+    d.meta.dismissed = d.meta.dismissed || {};
+    d.wrongs = Array.isArray(d.wrongs) ? d.wrongs : [];
+    d.diags = Array.isArray(d.diags) ? d.diags : [];
+    d.units.forEach(function (u) {
+      u.cards = Array.isArray(u.cards) ? u.cards : [];
+      u.history = Array.isArray(u.history) ? u.history : [];
+      if (!Array.isArray(u.reviews) || u.reviews.length !== 3) u.reviews = E.newReviews([null, null, null]);
+      u.lastFactor = u.lastFactor || 1;
+    });
+    return d;
+  }
+  function load() {
+    try {
+      var raw = window.localStorage.getItem(KEY);
+      if (raw) return normalize(JSON.parse(raw));
+    } catch (e) { storageOK = false; }
+    return null;
+  }
+  var persistAsked = false, saveWarned = false;
+  function save() {
+    try {
+      window.localStorage.setItem(KEY, JSON.stringify(data));
+      storageOK = true;
+    } catch (e) {
+      storageOK = false;
+      if (!saveWarned && !IN_FRAME) { saveWarned = true; toast('기록을 저장하지 못했어요. 저장 공간이 모자라거나 이 브라우저가 저장을 막고 있어요.'); }
+    }
+    if (!persistAsked && navigator.storage && navigator.storage.persist && !IN_FRAME) {
+      persistAsked = true;
+      try { navigator.storage.persist().catch(function () {}); } catch (e) {}
+    }
+    updateBadge();
+  }
+
+  // ================= 단원 다루기 =================
+  function examDate() { return data.exam ? data.exam.date : null; }
+  function unitById(id) { for (var i = 0; i < data.units.length; i++) if (data.units[i].id === id) return data.units[i]; return null; }
+  function makeUnit(o) {
+    var p = E.planFrom(o.first, examDate());
+    return {
+      id: uid(), name: o.name, subject: o.subject || '', star: !!o.star, first: o.first,
+      row: p.ok ? p.row : null, reviews: E.newReviews(p.ok ? p.reviews : [null, null, null]),
+      lastFactor: 1, finalDone: null, finalWeak: false, invalid: !p.ok, restarts: 0,
+      cards: [], history: [{ date: o.first, type: 'first', holes: null, made: 0 }], created: today()
+    };
+  }
+  function subjects() {
+    var s = {};
+    data.units.forEach(function (u) { if (u.subject) s[u.subject] = 1; });
+    return Object.keys(s).sort(cmpKo);
+  }
+  function retrievalDays(u) {
+    var s = {};
+    u.history.forEach(function (h) { if (h.type !== 'restart') s[h.date] = 1; });
+    return Object.keys(s).length;
+  }
+  function holesTrend(u) {
+    return u.history.filter(function (h) { return typeof h.holes === 'number'; }).map(function (h) { return h.holes; });
+  }
+  function finalStart(u) { return examDate() ? E.finalStartFor(u.first, examDate()) : null; }
+  function unitStatus(u) {
+    var T = today();
+    if (u.invalid) return { kind: 'invalid', text: '시험 날짜를 확인해 주세요' };
+    var k = E.nextPending(u);
+    if (k) {
+      var due = u.reviews[k - 1].due;
+      var late = E.diffDays(T, due);
+      if (late > 0) return { kind: 'late', k: k, due: due, late: late, text: k + '차 복습 · ' + late + '일 밀림' };
+      if (late === 0) return { kind: 'today', k: k, due: due, text: k + '차 복습 · 오늘' };
+      return { kind: 'next', k: k, due: due, text: k + '차 복습 · ' + mdw(due) };
+    }
+    var fs = finalStart(u);
+    if (fs && !u.finalDone) {
+      if (fs <= T) return { kind: 'final', text: '총복습 기간' };
+      return { kind: 'wait', text: '복습 끝 · 총복습 ' + mdw(fs) + '부터' };
+    }
+    return { kind: 'done', text: '이 단원 복습을 모두 마쳤어요' };
+  }
+  function dueItems() {
+    var T = today(), out = [];
+    data.units.forEach(function (u) {
+      if (u.invalid) return;
+      var k = E.nextPending(u);
+      if (!k) return;
+      var due = u.reviews[k - 1].due;
+      if (due <= T) out.push({ u: u, k: k, due: due, late: E.diffDays(T, due) });
+    });
+    // 책 5장: 밀린 것이 여러 단원이면 시험에 많이 나오는 단원부터
+    out.sort(function (a, b) {
+      return (b.u.star ? 1 : 0) - (a.u.star ? 1 : 0) || (a.due < b.due ? -1 : a.due > b.due ? 1 : 0) || cmpKo(a.u.name, b.u.name);
+    });
+    return out;
+  }
+  // 날짜별로 잡힌 복습 (마치지 않은 것)
+  function pendingOn(day) {
+    var out = [];
+    data.units.forEach(function (u) {
+      if (u.invalid) return;
+      for (var j = 1; j <= 3; j++) {
+        var r = u.reviews[j - 1];
+        if (r.due === day && !r.done) out.push({ u: u, k: j });
+      }
+    });
+    return out;
+  }
+  function doneOn(day) {
+    var out = [];
+    data.units.forEach(function (u) {
+      u.history.forEach(function (h) { if (h.date === day && h.type !== 'restart') out.push({ u: u, h: h }); });
+    });
+    return out;
+  }
+  function forecast(days) {
+    var T = today(), out = [];
+    var due = dueItems();
+    for (var i = 0; i < days; i++) {
+      var d = E.addDays(T, i);
+      var items = i === 0 ? due.map(function (x) { return { u: x.u, k: x.k }; }) : pendingOn(d);
+      var min = items.reduce(function (s, x) { return s + (EST[x.k] || 10); }, 0);
+      out.push({ date: d, n: items.length, min: min });
+    }
+    return out;
+  }
+  function nextDue() {
+    var best = null;
+    data.units.forEach(function (u) {
+      if (u.invalid) return;
+      var k = E.nextPending(u);
+      if (!k) return;
+      var d = u.reviews[k - 1].due;
+      if (d > today() && (!best || d < best.due)) best = { u: u, k: k, due: d };
+    });
+    return best;
+  }
+  function inFinal() {
+    var ex = examDate();
+    if (!ex) return false;
+    var T = today();
+    return T >= E.addDays(ex, -E.FINAL_DAYS) && T < ex;
+  }
+  function allCards() {
+    var out = [];
+    data.units.forEach(function (u) { u.cards.forEach(function (c) { out.push({ c: c, u: u }); }); });
+    return out;
+  }
+
+  // ================= 예시 =================
+  function loadSample() {
+    var T = today();
+    var d = blank();
+    d.meta.sample = true; d.meta.welcomeDone = true;
+    d.exam = { name: '예시: 공무원 9급 헌법', date: E.addDays(T, 90), provisional: false };
+    data = d;
+    function mk(name, subject, firstAgo, star) {
+      var u = makeUnit({ name: name, subject: subject, first: E.addDays(T, -firstAgo), star: star });
+      data.units.push(u); return u;
+    }
+    var a = mk('헌법 개정 절차', '헌법', 14, true);
+    a.history[0].holes = 4; a.history[0].made = 5;
+    [['헌법 개정을 제안할 수 있는 두 주체는?', '국회 재적의원 과반수, 대통령'],
+     ['헌법 개정안의 공고 기간은? 누가 하나요?', '20일 이상, 대통령'],
+     ['헌법 개정에서 "30일 이내"는 무엇의 기한인가요?', '국회 의결 뒤 국민투표에 부치는 기한'],
+     ['국민투표의 통과 조건 두 겹은?', '선거권자 과반수 투표, 투표자 과반수 찬성'],
+     ['공고 20일, 의결 60일, 국민투표 30일. 왜 공고가 먼저일까요?', '국민이 내용을 알 시간을 준 뒤에 국회가 의결하도록']
+    ].forEach(function (p) { a.cards.push({ id: uid(), q: p[0], a: p[1], right: 3, wrong: 1, created: a.first }); });
+    var b = mk('기본권 총론', '헌법', 15, false);
+    b.history[0].holes = 9;
+    var c = mk('대통령의 권한', '헌법', 35, false);
+    c.history[0].holes = 11;
+    E.completeReview(c, 1, E.addDays(c.first, 14), 'ok', data.exam.date);
+    c.history.push({ date: E.addDays(c.first, 14), type: 'review', k: 1, rating: 'ok', holes: 6, made: 2 });
+    c.cards.push({ id: uid(), q: '대통령의 임기는? 중임할 수 있나요?', a: '5년, 중임할 수 없어요 (단임)', right: 2, wrong: 0, created: c.first });
+    c.cards.push({ id: uid(), q: '대통령이 긴급명령을 할 수 있는 요건 하나는?', a: '국가의 안위에 관계되는 중대한 교전상태에서, 국회의 집회가 불가능한 때', right: 1, wrong: 2, created: c.first });
+    var dd = mk('국회의 권한', '헌법', 0, false);
+    dd.history[0].holes = null;
+    mk('행정행위의 효력', '행정법', 3, true);
+    data.wrongs.push({ id: uid(), date: E.addDays(T, -2), src: '기출 2025년 7번', mark: '헷', why: '공고 20일과 의결 60일을 바꿔 기억함', unitId: a.id, redo: null });
+    data.wrongs.push({ id: uid(), date: E.addDays(T, -1), src: '기출 2024년 12번', mark: '읽', why: '"옳지 않은 것"을 놓침', unitId: '', redo: null });
+    save();
+  }
+
+  // ================= 달력 파일과 구글 캘린더 =================
+  function appUrl() {
+    if (CFG.appUrl) return CFG.appUrl;
+    if (IN_FRAME || !/^https?:/.test(location.protocol)) return '';
+    return location.origin + location.pathname;
+  }
+  function icsEsc(s) { return String(s).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n'); }
+  function fold(line) {
+    var enc = new TextEncoder(), parts = [], cur = '', n = 0, limit = 75;
+    Array.from(line).forEach(function (ch) {
+      var b = enc.encode(ch).length;
+      if (n + b > limit) { parts.push(cur); cur = ''; n = 0; limit = 74; }
+      cur += ch; n += b;
+    });
+    parts.push(cur);
+    return parts.join('\r\n ');
+  }
+  function stampUTC() {
+    var d = new Date();
+    return d.getUTCFullYear() + pad(d.getUTCMonth() + 1) + pad(d.getUTCDate()) + 'T' + pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + pad(d.getUTCSeconds()) + 'Z';
+  }
+  function icsEvent(o) {
+    var L = ['BEGIN:VEVENT', 'UID:' + o.uid, 'DTSTAMP:' + stampUTC(), 'DTSTART:' + o.start, 'DURATION:' + (o.dur || 'PT15M')];
+    if (o.rrule) L.push('RRULE:' + o.rrule);
+    L.push('SUMMARY:' + icsEsc(o.title));
+    if (o.desc) L.push('DESCRIPTION:' + icsEsc(o.desc));
+    if (o.url) L.push('URL:' + o.url);
+    L.push('BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:' + icsEsc(o.title), 'TRIGGER:PT0M', 'END:VALARM', 'END:VEVENT');
+    return L;
+  }
+  function icsWrap(events) {
+    var L = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//amgi-rx//review-reminder//KO', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'];
+    events.forEach(function (e) { L = L.concat(e); });
+    L.push('END:VCALENDAR');
+    return L.map(fold).join('\r\n') + '\r\n';
+  }
+  function hm(t) { var p = (t || '20:00').split(':'); return pad(+p[0]) + pad(+p[1]) + '00'; }
+  function dailyICS(time) {
+    var url = appUrl();
+    return icsWrap([icsEvent({
+      uid: 'amgirx-daily-' + hm(time).slice(0, 4) + '@amgi-rx', start: today().replace(/-/g, '') + 'T' + hm(time), dur: 'PT10M', rrule: 'FREQ=DAILY',
+      title: '오늘의 복습 확인하기 (암기 처방전)', desc: '앱을 열어 오늘 복습할 단원을 확인해요. 새 진도보다 복습이 먼저예요.' + (url ? '\n' + url : ''), url: url
+    })]);
+  }
+  function unitICS(u) {
+    var url = appUrl(), ev = [], time = data.settings.remind;
+    for (var j = 1; j <= 3; j++) {
+      var r = u.reviews[j - 1];
+      if (!r.due || r.done || r.due < today()) continue;
+      ev.push(icsEvent({
+        uid: 'amgirx-' + u.id + '-r' + j + '@amgi-rx', start: r.due.replace(/-/g, '') + 'T' + hm(time),
+        title: j + '차 복습: ' + (u.subject ? u.subject + ' ' : '') + u.name,
+        desc: '책을 펴기 전에 덮고 꺼내기 5분 → 카드 한 바퀴 → 펴서 맞춰 보기' + (url ? '\n' + url : ''), url: url
+      }));
+    }
+    var fs = finalStart(u);
+    if (fs && fs >= today() && !u.finalDone) {
+      ev.push(icsEvent({ uid: 'amgirx-' + u.id + '-final@amgi-rx', start: fs.replace(/-/g, '') + 'T' + hm(time), title: '총복습 시작 (시험 2주 전): ' + u.name, desc: '과목마다 목차를 백지에 적고 단원마다 핵심 세 가지를 달아요.' + (url ? '\n' + url : ''), url: url }));
+    }
+    return ev.length ? icsWrap(ev) : null;
+  }
+  function gcalDaily(time) {
+    var d = today().replace(/-/g, '');
+    var p = (time || '20:00').split(':');
+    var start = new Date(2000, 0, 1, +p[0], +p[1]);
+    var end = new Date(start.getTime() + 10 * 60000);
+    var endDay = end.getDate() === 1 ? d : E.addDays(today(), 1).replace(/-/g, '');
+    var dates = d + 'T' + pad(start.getHours()) + pad(start.getMinutes()) + '00/' + endDay + 'T' + pad(end.getHours()) + pad(end.getMinutes()) + '00';
+    var tz = 'Asia/Seoul';
+    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || tz; } catch (e) {}
+    var url = appUrl();
+    var q = 'action=TEMPLATE&text=' + encodeURIComponent('오늘의 복습 확인하기 (암기 처방전)') +
+      '&details=' + encodeURIComponent('앱을 열어 오늘 복습할 단원을 확인해요. 새 진도보다 복습이 먼저예요.' + (url ? '\n' + url : '')) +
+      '&dates=' + dates + '&ctz=' + encodeURIComponent(tz) + '&recur=' + encodeURIComponent('RRULE:FREQ=DAILY');
+    return 'https://calendar.google.com/calendar/render?' + q;
+  }
+  function download(name, mime, text) {
+    if (IN_FRAME) { toast('미리보기 화면에서는 파일을 저장할 수 없어요. 공개한 앱 주소에서는 돼요.'); return false; }
+    try {
+      var blob = new Blob([text], { type: mime });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = name; a.rel = 'noopener';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 5000);
+      return true;
+    } catch (e) { toast('파일을 만들지 못했어요. "글자로 복사"를 써 주세요.'); return false; }
+  }
+  function copyText(text, okMsg) {
+    function fallback() {
+      var ta = $('#copy-fallback');
+      if (ta) { ta.hidden = false; ta.value = text; ta.focus(); ta.select(); }
+      toast('복사가 막혀 있어요. 아래 칸의 글자를 길게 눌러 복사해 주세요.');
+    }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { toast(okMsg || '복사했어요'); }, fallback);
+      } else fallback();
+    } catch (e) { fallback(); }
+  }
+
+  // ================= 그림 기호 =================
+  var ICON = {
+    today: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M3 9.5h18M8 3v3M16 3v3"/><path d="m8.5 15 2.2 2.2 4.8-4.7"/></svg>',
+    units: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="6" rx="2"/><rect x="4" y="11" width="16" height="4" rx="1.5"/><rect x="4" y="17" width="16" height="4" rx="1.5"/></svg>',
+    cal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M3 9.5h18M8 3v3M16 3v3"/><path d="M7.5 13h.01M12 13h.01M16.5 13h.01M7.5 17h.01M12 17h.01"/></svg>',
+    more: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>'
+  };
+
+  // ================= 화면 이동 =================
+  var route = { name: 'today', id: null };
+  function parseHash() {
+    var h = (location.hash || '').replace(/^#/, '');
+    var m = h.match(/^(unit|review)-([a-z0-9]+)$/i);
+    if (m) return { name: m[1], id: m[2] };
+    var names = ['today', 'units', 'calendar', 'more', 'diag', 'wrongs', 'remind', 'backup', 'install', 'guide', 'evidence', 'privacy', 'exam', 'about', 'session'];
+    return { name: names.indexOf(h) >= 0 ? h : 'today', id: null };
+  }
+  function go(h) {
+    if (location.hash === '#' + h) { route = parseHash(); render(); }
+    else location.hash = h;
+  }
+
+  // ================= 그리기: 틀 =================
+  function header() {
+    var ex = data && data.exam;
+    var dd = '';
+    if (ex && ex.date) {
+      var n = E.diffDays(ex.date, today());
+      var lbl = n > 0 ? 'D-' + n : n === 0 ? 'D-DAY' : '시험 끝';
+      dd = '<a class="dday" href="#exam" aria-label="시험 정보 바꾸기"><span class="dday-n">' + esc(lbl) + '</span><span class="dday-l">' + esc(ex.name || '내 시험') + (ex.provisional ? ' (임시)' : '') + '</span></a>';
+    }
+    return '<header class="top"><div class="top-in"><a class="brand" href="#today" aria-label="오늘 화면으로"><span class="wm">암기 <b>처방전</b></span><span class="wm-sub">복습 알림</span></a>' + dd + '</div></header>';
+  }
+  function tabs() {
+    var n = dueItems().length;
+    var cur = route.name;
+    var map = { unit: 'units', diag: 'more', wrongs: 'more', remind: 'more', backup: 'more', install: 'more', guide: 'more', evidence: 'more', privacy: 'more', exam: 'more', about: 'more' };
+    var active = map[cur] || cur;
+    function t(id, label, icon, badge) {
+      return '<a class="tab" href="#' + id + '"' + (active === id ? ' aria-current="page"' : '') + '>' + icon + '<span>' + label + '</span>' + (badge ? '<span class="badge" aria-label="오늘 복습 ' + badge + '개">' + badge + '</span>' : '') + '</a>';
+    }
+    return '<nav class="tabs" aria-label="화면 고르기"><div class="tabs-in">' + t('today', '오늘', ICON.today, n) + t('units', '단원', ICON.units) + t('calendar', '달력', ICON.cal) + t('more', '더보기', ICON.more) + '</div></nav>';
+  }
+  var root = null;
+  function setWelcome(on) { try { document.documentElement.classList.toggle('is-welcome', !!on); } catch (e) {} }
+  function render() {
+    if (!root) return;
+    closeSheet(true);
+    if (!data || !data.exam) { setWelcome(true); root.innerHTML = welcomeView(); afterWelcome(); return; }
+    setWelcome(false);
+    var v = route.name, html;
+    if (v === 'session') { if (!S) { location.replace('#today'); return; } v = 'today'; }
+    switch (v) {
+      case 'units': html = unitsView(); break;
+      case 'unit': html = unitView(unitById(route.id)); break;
+      case 'calendar': html = calendarView(); break;
+      case 'more': html = moreView(); break;
+      case 'diag': html = diagView(); break;
+      case 'wrongs': html = wrongsView(); break;
+      case 'remind': html = remindView(); break;
+      case 'backup': html = backupView(); break;
+      case 'install': html = installView(); break;
+      case 'guide': html = guideView(); break;
+      case 'evidence': html = evidenceView(); break;
+      case 'privacy': html = privacyView(); break;
+      case 'exam': html = examView(); break;
+      case 'about': html = aboutView(); break;
+      default: html = todayView();
+    }
+    root.innerHTML = '<div class="app">' + header() + '<main class="view" id="main">' + html + '</main>' + tabs() + '</div>';
+    if (S) renderSession();
+    afterRender(v);
+  }
+
+  // ================= 처음 화면 =================
+  var welcomeStep = 0;
+  function welcomeView() {
+    if (welcomeStep === 0) {
+      return '<div class="welcome"><div class="welcome-in">' +
+        '<div class="eyebrow">책 「암기 처방전」의 복습 알림 앱</div>' +
+        '<h1>암기<br><b>처방전</b></h1>' +
+        '<p class="lead"><b>읽은 횟수가 아니라 꺼낸 횟수가 남아요.</b><br>공부한 단원을 넣으면 시험까지 남은 날에 맞춰 복습 날짜를 잡고, 복습 날에는 덮고 꺼내는 순서를 안내해요.</p>' +
+        '<div class="motif" aria-label="일주일 뒤에 남은 기억: 네 번 읽은 조 40퍼센트, 한 번 읽고 세 번 꺼낸 조 61퍼센트">' +
+          '<div class="lab">일주일 뒤에 남은 기억</div>' +
+          '<div class="mrow"><div>네 번 읽은 조<div class="track"><i style="width:40%;background:var(--brand-mute)"></i></div></div><b class="num">40%</b></div>' +
+          '<div class="mrow"><div><b>한 번 읽고 세 번 꺼낸 조</b><div class="track"><i style="width:61%;background:var(--accent)"></i></div></div><b class="num">61%</b></div>' +
+          '<div class="src">Roediger &amp; Karpicke (2006), 대학생 180명 실험</div>' +
+        '</div>' +
+        '<ul class="points">' +
+          '<li><span>1</span><div>시험 날짜와 공부한 단원을 넣으면 책 5장의 간격표대로 1차·2차·3차 복습 날을 잡아요.</div></li>' +
+          '<li><span>2</span><div>복습 날에는 책을 펴기 전에 5분 동안 떠올려 쓰고, 질문 카드를 한 바퀴 돌리고, 펴서 맞춰 봐요.</div></li>' +
+          '<li><span>3</span><div>기록은 이 휴대폰 안에만 저장돼요. 가입도, 로그인도 없어요.</div></li>' +
+        '</ul>' +
+        '<div class="stack">' +
+          '<button class="btn btn-primary btn-lg btn-block" data-act="welcome-next">내 시험으로 시작하기</button>' +
+          '<button class="btn btn-ghost btn-block" data-act="welcome-sample">예시로 먼저 둘러보기</button>' +
+          '<button class="btn btn-text btn-block" data-act="welcome-import">다른 휴대폰에서 쓰던 기록 불러오기</button>' +
+        '</div>' +
+        '<div class="by"><span>공부만했던의사 지음 「암기 처방전」</span><span>기록은 기기 안에만</span></div>' +
+      '</div></div>';
+    }
+    if (welcomeStep === 1) {
+      var T = today();
+      return '<div class="welcome"><div class="welcome-in">' +
+        '<div class="eyebrow">1 / 2 · 시험</div>' +
+        '<h2 class="h1" style="font-size:28px">시험 날짜를 알려 주세요</h2>' +
+        '<p class="lead">복습 간격은 시험까지 남은 날로 정해요. 날짜를 나중에 바꾸면 복습 날짜도 다시 계산해요.</p>' +
+        '<form class="card" id="exam-form" novalidate>' +
+          '<div class="field"><label for="ex-name">시험 이름 (안 적어도 돼요)</label><input type="text" id="ex-name" maxlength="40" placeholder="예: 공인중개사 1차" autocomplete="off"></div>' +
+          '<div class="field"><label for="ex-date">시험 날짜</label><input type="date" id="ex-date" min="' + E.addDays(T, 1) + '" required></div>' +
+          '<p class="err" id="ex-err" hidden></p>' +
+          '<button class="btn btn-primary btn-lg btn-block" type="submit">다음</button>' +
+          '<button class="btn btn-text" type="button" data-act="exam-unknown">시험 날짜를 아직 몰라요 (임시로 석 달 뒤)</button>' +
+        '</form>' +
+        '<button class="btn btn-ghost" data-act="welcome-back">뒤로</button>' +
+      '</div></div>';
+    }
+    return '<div class="welcome"><div class="welcome-in">' +
+      '<div class="eyebrow">2 / 2 · 첫 단원</div>' +
+      '<h2 class="h1" style="font-size:28px">오늘 공부한 단원을 넣어 볼까요?</h2>' +
+      '<p class="lead">단원 이름과 처음 공부한 날을 넣으면 복습 날짜가 바로 나와요.</p>' +
+      '<div class="card">' + unitFormHtml(null) + '</div>' +
+      '<button class="btn btn-ghost" data-act="welcome-skip">나중에 넣을게요</button>' +
+    '</div></div>';
+  }
+  function afterWelcome() {
+    var f = $('#exam-form');
+    if (f) f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var date = $('#ex-date').value, name = $('#ex-name').value.trim();
+      var err = $('#ex-err');
+      if (!E.isDate(date) || date <= today()) { err.textContent = '내일이나 그 뒤의 날짜를 골라 주세요.'; err.hidden = false; return; }
+      data = data || blank();
+      data.exam = { name: name, date: date, provisional: false };
+      save();
+      welcomeStep = 2; root.innerHTML = welcomeView(); afterWelcome();
+    });
+    bindUnitForm(null);
+  }
+
+  // ================= 오늘 =================
+  function banners() {
+    var b = [];
+    var T = today();
+    if (data.meta.sample) b.push('<div class="banner banner-accent"><div class="grow"><b>지금은 예시를 보고 있어요.</b><span>예시 단원과 카드는 둘러보기용이에요.</span><div><button class="btn btn-sm btn-primary" data-act="sample-clear">예시 지우고 내 시험으로 시작</button></div></div></div>');
+    if (!storageOK) b.push(IN_FRAME
+      ? '<div class="banner banner-warn"><div class="grow"><b>미리보기 화면이라 기록이 저장되지 않아요.</b><span>둘러보기용이에요. 공개한 앱 주소에서는 기록이 휴대폰에 저장돼요.</span></div></div>'
+      : '<div class="banner banner-warn"><div class="grow"><b>이 브라우저에서는 기록이 저장되지 않아요.</b><span>개인 정보 보호 모드이거나 저장이 막혀 있어요. 일반 창에서 열어 주세요.</span></div></div>');
+    if (IN_APP && !data.meta.dismissed.inapp) {
+      b.push('<div class="banner banner-warn"><div class="grow"><b>앱 안의 브라우저로 열었어요.</b><span>카카오톡이나 SNS 앱 안에서 열면 기록이 따로 저장되고 홈 화면에 설치할 수 없어요. 오른쪽 위 메뉴(⋮ 또는 ···)에서 "다른 브라우저로 열기"를 눌러 주세요.</span>' + (IS_KAKAO ? '<div><button class="btn btn-sm btn-primary" data-act="open-external">기본 브라우저로 열기</button></div>' : '') + '</div><button class="x" data-act="dismiss" data-key="inapp" aria-label="닫기">×</button></div>');
+    }
+    if (data.exam.provisional) b.push('<div class="banner banner-info"><div class="grow"><b>시험 날짜를 임시로 석 달 뒤로 잡았어요.</b><span>날짜가 정해지면 바꿔 주세요. 복습 날짜도 다시 계산해요.</span><div><a class="btn btn-sm" href="#exam">시험 날짜 바꾸기</a></div></div></div>');
+    if (!isStandalone() && !IN_APP && !IN_FRAME && !data.meta.dismissed.install && data.units.length >= 1) {
+      b.push('<div class="banner banner-info"><div class="grow"><b>홈 화면에 설치하면 앱처럼 써요.</b><span>' + (IS_IOS ? '아이폰은 설치해야 기록이 오래 안전하게 남아요.' : '인터넷이 없어도 열려요.') + '</span><div><a class="btn btn-sm btn-primary" href="#install">설치하는 법</a></div></div><button class="x" data-act="dismiss" data-key="install" aria-label="닫기">×</button></div>');
+    }
+    var lastDiag = data.diags.length ? data.diags[data.diags.length - 1] : null;
+    if (lastDiag && E.diffDays(T, lastDiag.date) >= 28 && !data.meta.dismissed['diag-' + lastDiag.date]) {
+      b.push('<div class="banner banner-info"><div class="grow"><b>자가 진단을 한 지 4주가 지났어요.</b><span>책 부록대로 한 번 더 해 보고 달라진 묶음을 확인해요.</span><div><a class="btn btn-sm btn-primary" href="#diag">다시 진단하기</a></div></div><button class="x" data-act="dismiss" data-key="diag-' + esc(lastDiag.date) + '" aria-label="닫기">×</button></div>');
+    }
+    return b.join('');
+  }
+  function rxItem(x) {
+    var u = x.u, cards = u.cards.length;
+    var cls = x.late > 0 ? 'late' : 'today';
+    var when = x.late > 0 ? '<span class="pill pill-late">' + x.late + '일 밀림</span>' : '<span class="pill pill-today">오늘</span>';
+    return '<article class="rx ' + cls + '">' +
+      '<div class="rx-main">' +
+        '<div class="rx-title">' + (u.star ? '<span class="star" aria-label="자주 나와요">★</span> ' : '') + esc(u.name) + '</div>' +
+        '<div class="rx-meta">' + (u.subject ? '<span class="chip">' + esc(u.subject) + '</span>' : '') + '<span>' + x.k + '차 복습</span>' + when + '<span>어림 ' + EST[x.k] + '분</span></div>' +
+        '<div class="rx-dose"><b>용법</b> 덮고 꺼내기 5분 → ' + (cards ? '카드 ' + cards + '장 한 바퀴' : '종이 카드 한 바퀴') + ' → 펴서 맞춰 보기</div>' +
+      '</div>' +
+      '<button class="btn btn-primary" data-act="start-review" data-id="' + u.id + '">시작</button>' +
+    '</article>';
+  }
+  function todayView() {
+    var T = today(), ex = data.exam, n = E.diffDays(ex.date, T);
+    var due = dueItems();
+    var mins = due.reduce(function (s, x) { return s + EST[x.k]; }, 0);
+    var out = [];
+    out.push('<section class="stack"><div class="eyebrow">' + esc(mdw(T)) + '</div><h1 class="h1">오늘의 복습 처방</h1>' +
+      '<p class="sub">' + (due.length ? '복습할 단원 ' + due.length + '개 · 어림 ' + mins + '분' : '오늘 잡힌 복습은 없어요') + '</p></section>');
+    out.push(banners());
+
+    if (n < 0) {
+      out.push('<div class="card"><h2 class="h2">시험이 끝났어요</h2><p>수고 많으셨어요. 다음 시험이 있으면 날짜를 넣어 주세요. 남은 단원의 복습 날짜를 새로 잡아요.</p><a class="btn btn-primary" href="#exam">다음 시험 날짜 넣기</a></div>');
+    } else if (n === 0) {
+      out.push('<div class="card"><div class="eyebrow">시험 날</div><h2 class="h2">오늘 시험이에요. 잘 다녀오세요.</h2><ul class="tips"><li>카페인은 평소 마시던 만큼만 마셔요.</li><li>시험장에서는 요약본을 처음부터 읽는 대신, 약한 단원의 목차를 한 번 떠올려 봐요.</li><li>긴장은 자연스러워요. 꺼내는 연습으로 익힌 기억은 스트레스를 받아도 덜 흔들렸어요.</li></ul><p class="small">책 13장 "시험 전날과 시험 날"에서 옮겼어요.</p></div>');
+    }
+    if (n === 1) {
+      out.push('<div class="card"><div class="eyebrow">시험 전날</div><h2 class="h2">새 내용을 넣지 않아요</h2><ul class="tips"><li>헷갈리는 짝의 표와 자주 틀린 카드만 봐요.</li><li>평소 자던 시각에 누워요. 일찍 누워도 잠은 일찍 오지 않아요.</li><li>잠이 안 와도 괜찮아요. 시험 전날 하룻밤의 잠은 성적과 관계가 없었다는 연구가 있어요.</li></ul>' + (wrongCards(1).length ? '<button class="btn btn-primary" data-act="drill-weak" data-min="1">틀린 적 있는 카드 ' + wrongCards(1).length + '장 보기</button>' : '') + '<p class="small">책 13장 "시험 전날과 시험 날"에서 옮겼어요.</p></div>');
+    }
+
+    if (due.length) {
+      var over = mins > data.settings.budget;
+      out.push('<section class="stack"><div class="rx-list">' + due.map(rxItem).join('') + '</div>' +
+        (over ? '<div class="banner banner-warn"><div class="grow"><b>오늘 복습이 어림 ' + mins + '분이에요.</b><span>하루 복습 시간(' + data.settings.budget + '분)을 넘으면 새로 넣는 양을 줄이세요. 새 진도보다 복습이 먼저예요. (책 13장)</span></div></div>' : '') +
+        (due.some(function (x) { return x.late > 0; }) ? '<p class="small">밀린 복습은 건너뛰지 말고 늦더라도 한 번은 꺼내요. 하루이틀 밀려도 괜찮아요. 시험에 자주 나오는 단원(★)을 먼저 놓았어요. (책 5장)</p>' : '') +
+      '</section>');
+    } else if (n > 0) {
+      var nd = nextDue();
+      out.push('<div class="card flat"><div class="empty"><div class="big">0</div><p><b>오늘은 복습할 단원이 없어요.</b></p><p class="small">' + (nd ? '다음 복습은 ' + esc(mdw(nd.due)) + ', ' + esc(nd.u.name) + ' ' + nd.k + '차예요.' : (data.units.length ? '잡힌 복습을 모두 마쳤어요.' : '공부한 단원을 넣으면 복습 날짜가 잡혀요.')) + '</p></div></div>');
+    }
+
+    if (inFinal()) out.push(finalCard());
+
+    var firsts = data.units.filter(function (u) { return u.first === T && !u.invalid; });
+    if (firsts.length) {
+      out.push('<section class="stack"><h2 class="h2">오늘 처음 공부한 단원</h2><div class="list">' + firsts.map(function (u) {
+        var h0 = u.history.filter(function (h) { return h.type === 'first' && h.date === T; })[0];
+        var rec = h0 && typeof h0.holes === 'number';
+        return '<div class="li"><div class="grow"><span class="t">' + esc(u.name) + '</span><span class="s">' + (rec ? '구멍 ' + h0.holes + '군데 · 카드 ' + u.cards.length + '장' : '덮고 꺼내기를 아직 기록하지 않았어요') + '</span></div>' +
+          '<button class="btn btn-sm ' + (rec ? '' : 'btn-primary') + '" data-act="start-first" data-id="' + u.id + '">' + (rec ? '한 번 더' : '덮고 꺼내기') + '</button></div>';
+      }).join('') + '</div><p class="small">첫날은 소제목마다 읽고, 덮고, 3~10분 떠올려 쓰고, 펴서 맞춰 봐요. 카드는 세 번 맞힐 때까지 돌려요. (책 3·4장)</p></section>');
+    }
+
+    if (n > 0) out.push('<button class="btn btn-primary btn-lg btn-block" data-act="add-unit">＋ 오늘 공부한 단원 넣기</button>');
+
+    if (data.units.length && n > 0) out.push(forecastCard());
+
+    var w = wd(T);
+    if (n > 1 && (w === 6 || w === 0)) {
+      out.push('<div class="card soft flat"><div class="eyebrow">' + (w === 6 ? '토요일' : '일요일') + '</div><p>' + (w === 6 ? '새 진도 없이 이번 주 단원의 문제를 섞어서 풀고, 헷갈리는 짝의 표를 만들고, 밀린 복습을 해요.' : '쉬는 날이자 예비일이에요. 평소와 같은 시각에 자고 일어나요.') + '</p><p class="small">책 13장 "한 주의 틀"</p></div>');
+    }
+    return out.join('');
+  }
+  function forecastCard() {
+    var f = forecast(7), budget = data.settings.budget;
+    var max = Math.max(budget, f.reduce(function (m, x) { return Math.max(m, x.min); }, 0)) || 1;
+    var overDays = f.filter(function (x) { return x.min > budget; });
+    var bars = f.map(function (x, i) {
+      var h = Math.round((x.min / max) * 100);
+      var cls = 'bar' + (x.min > budget ? ' over' : '') + (x.n === 0 ? ' zero' : '') + (i === 0 ? ' is-today' : '');
+      return '<div class="' + cls + '" title="' + esc(mdw(x.date)) + ' 복습 ' + x.n + '개, 어림 ' + x.min + '분"><span class="v">' + (x.n ? x.min + '분' : '') + '</span><i style="height:' + Math.max(h, 3) + '%"></i><span class="d">' + (i === 0 ? '오늘' : WD[wd(x.date)]) + '</span></div>';
+    }).join('');
+    return '<section class="card"><div class="card-h"><h2 class="h3">7일 복습 예보</h2><span class="small">하루 ' + budget + '분 기준</span></div>' +
+      '<div class="bars" role="img" aria-label="앞으로 7일 동안 날마다 잡힌 복습 시간">' + bars + '</div>' +
+      (overDays.length ? '<p class="small">주홍 막대는 하루 복습 시간을 넘는 날이에요. 그 전날까지 새 진도를 조금 줄이면 복습이 밀리지 않아요.</p>' : '<p class="small">복습 한 번의 시간은 1차 15분, 2차 10분, 3차 5분으로 어림했어요.</p>') +
+    '</section>';
+  }
+  function wrongCards(minWrong) {
+    return allCards().filter(function (x) { return (x.c.wrong || 0) >= minWrong; });
+  }
+  function finalCard() {
+    var T = today(), ex = examDate(), left = E.diffDays(ex, T);
+    var list = data.units.filter(function (u) { var fs = finalStart(u); return fs && fs <= T; });
+    var todo = list.filter(function (u) { return !u.finalDone; });
+    var weak = list.filter(function (u) { return u.finalDone && u.finalWeak; });
+    var wc = wrongCards(1).length;
+    var groups = {};
+    todo.forEach(function (u) { (groups[u.subject || '과목 없음'] = groups[u.subject || '과목 없음'] || []).push(u); });
+    var g = Object.keys(groups).sort(cmpKo).map(function (s) {
+      return '<div class="group-h">' + esc(s) + '</div><div class="list">' + groups[s].map(function (u) {
+        return '<div class="li"><div class="grow"><span class="t">' + esc(u.name) + '</span><span class="s">핵심 세 가지가 떠오르나요?</span></div>' +
+          '<button class="btn btn-sm" data-act="final-weak" data-id="' + u.id + '">약해요</button><button class="btn btn-sm btn-primary" data-act="final-ok" data-id="' + u.id + '">떠올랐어요</button></div>';
+      }).join('') + '</div>';
+    }).join('');
+    return '<section class="card"><div class="eyebrow">총복습 · 시험 ' + left + '일 전</div><h2 class="h2">전 범위를 다시 꺼내요</h2>' +
+      '<ul class="tips"><li>과목마다 목차를 백지에 적고, 단원마다 핵심 세 가지를 달아요. 안 떠오르는 단원이 약한 단원이에요.</li><li>새 교재, 새 강의를 시작하지 않아요.</li><li>남겨 둔 기출로 실제 시험과 같은 시각, 같은 시간, 같은 문항 수로 풀어요.</li><li>잠을 줄이지 않아요.</li></ul>' +
+      (todo.length ? g : '<p class="small">총복습 목록의 단원을 모두 확인했어요.</p>') +
+      (weak.length ? '<div class="group-h">약한 단원</div><div class="list">' + weak.map(function (u) { return '<div class="li"><div class="grow"><span class="t">' + esc(u.name) + '</span><span class="s">한 번 더 꺼내 보세요</span></div><button class="btn btn-sm btn-primary" data-act="start-extra" data-id="' + u.id + '">한 번 더 꺼내기</button></div>'; }).join('') + '</div>' : '') +
+      (wc ? '<button class="btn btn-block" data-act="drill-weak" data-min="1">틀린 적 있는 카드 ' + wc + '장 한 바퀴</button><p class="small">한 번도 안 틀린 카드는 건너뛰어도 돼요.</p>' : '') +
+      '<p class="small">책 13장 "시험 전 2주의 총복습"</p></section>';
+  }
+
+  // ================= 단원 목록 =================
+  var unitFilter = { q: '', subject: '' };
+  function dotsFor(u) {
+    var T = today(), out = ['<i class="on" title="첫 공부"></i>'];
+    for (var j = 1; j <= 3; j++) {
+      var r = u.reviews[j - 1];
+      if (r.done) out.push('<i class="on" title="' + j + '차 마침"></i>');
+      else if (!r.due) out.push('<i class="skip" title="' + j + '차 건너뜀"></i>');
+      else if (r.due < T) out.push('<i class="late" title="' + j + '차 밀림"></i>');
+      else if (r.due === T) out.push('<i class="due" title="' + j + '차 오늘"></i>');
+      else out.push('<i title="' + j + '차 예정"></i>');
+    }
+    var fs = finalStart(u);
+    if (fs) out.push(u.finalDone ? '<i class="on" title="총복습 마침"></i>' : '<i title="총복습"></i>');
+    return '<span class="dots" aria-hidden="true">' + out.join('') + '</span>';
+  }
+  function unitsView() {
+    var subs = subjects();
+    var q = unitFilter.q.trim();
+    var list = data.units.filter(function (u) {
+      if (unitFilter.subject && u.subject !== unitFilter.subject) return false;
+      if (q && (u.name + ' ' + u.subject).toLowerCase().indexOf(q.toLowerCase()) < 0) return false;
+      return true;
+    });
+    function key(u) { var st = unitStatus(u); return st.due || (st.kind === 'final' ? '0000' : '9999'); }
+    list.sort(function (a, b) { var ka = key(a), kb = key(b); return ka < kb ? -1 : ka > kb ? 1 : cmpKo(a.name, b.name); });
+    var groups = {};
+    list.forEach(function (u) { var s = u.subject || '과목 없음'; (groups[s] = groups[s] || []).push(u); });
+    var html = '<section class="stack"><h1 class="h1">단원</h1><p class="sub">단원 ' + data.units.length + '개 · 카드 ' + allCards().length + '장</p></section>';
+    if (data.units.length) {
+      html += '<div class="field"><label class="vh" for="u-search">단원 찾기</label><input type="text" id="u-search" placeholder="단원 이름으로 찾기" value="' + esc(unitFilter.q) + '" autocomplete="off"></div>';
+      if (subs.length > 1) html += '<div class="seg" role="group" aria-label="과목 고르기"><button data-act="u-sub" data-s="" aria-pressed="' + (!unitFilter.subject) + '">전체</button>' + subs.map(function (s) { return '<button data-act="u-sub" data-s="' + esc(s) + '" aria-pressed="' + (unitFilter.subject === s) + '">' + esc(s) + '</button>'; }).join('') + '</div>';
+      html += '<div id="unit-groups" class="stack">' + Object.keys(groups).sort(cmpKo).map(function (s) {
+        return '<div class="group-h">' + esc(s) + '</div><div class="list">' + groups[s].map(function (u) {
+          var st = unitStatus(u);
+          var pill = st.kind === 'late' ? 'pill-late' : st.kind === 'today' ? 'pill-today' : st.kind === 'done' ? 'pill-done' : 'pill-next';
+          return '<a class="li" href="#unit-' + u.id + '"><div class="grow"><span class="t">' + (u.star ? '<span class="star">★</span> ' : '') + esc(u.name) + '</span><span class="s"><span class="pill ' + pill + '">' + esc(st.text) + '</span></span></div>' + dotsFor(u) + '<span class="chev" aria-hidden="true">›</span></a>';
+        }).join('') + '</div>';
+      }).join('') + (list.length ? '' : '<p class="small center">찾는 단원이 없어요.</p>') + '</div>';
+      html += '<p class="small">점은 첫 공부 · 1차 · 2차 · 3차 · 총복습이에요. 초록은 마침, 주홍은 오늘, 빨강은 밀림, 점선은 시험 날짜 때문에 건너뛴 복습이에요.</p>';
+    } else {
+      html += '<div class="card flat"><div class="empty"><div class="big">0</div><p><b>아직 넣은 단원이 없어요.</b></p><p class="small">공부한 날마다 단원을 하나씩 넣어요. 하루치 분량을 "한 단원"으로 잡으면 돼요.</p></div></div>';
+    }
+    if (E.diffDays(examDate(), today()) > 0) html += '<button class="btn btn-primary btn-lg btn-block" data-act="add-unit">＋ 단원 넣기</button>';
+    return html;
+  }
+
+  // ================= 단원 하나 =================
+  function unitView(u) {
+    if (!u) return '<p>이 단원을 찾을 수 없어요.</p><a class="btn" href="#units">단원 목록으로</a>';
+    var T = today(), row = E.rowById(u.row), st = unitStatus(u);
+    var html = '<section class="stack"><a class="btn btn-text" href="#units" style="align-self:flex-start">‹ 단원 목록</a>' +
+      '<div class="row"><h1 class="h1 grow">' + esc(u.name) + '</h1><button class="btn btn-sm" data-act="toggle-star" data-id="' + u.id + '" aria-pressed="' + !!u.star + '">' + (u.star ? '★ 자주 나와요' : '☆ 자주 나와요') + '</button></div>' +
+      '<div class="row">' + (u.subject ? '<span class="chip">' + esc(u.subject) + '</span>' : '') + (row ? '<span class="chip" title="' + esc(row.text) + '">' + esc(row.label) + ' 줄</span>' : '') + '<span class="small">처음 공부 ' + esc(mdw(u.first)) + (u.restarts ? ' · 첫 공부로 돌아간 횟수 ' + u.restarts : '') + '</span></div></section>';
+
+    if (st.kind === 'today' || st.kind === 'late') {
+      html += '<button class="btn btn-primary btn-lg btn-block" data-act="start-review" data-id="' + u.id + '">' + st.k + '차 복습 시작</button>';
+    }
+    if (u.invalid) html += '<div class="banner banner-warn"><div class="grow"><b>처음 공부한 날이 시험 날짜와 같거나 그 뒤예요.</b><span>시험 날짜나 처음 공부한 날을 고쳐 주세요.</span></div></div>';
+
+    // 타임라인
+    var items = [];
+    var h0 = u.history.filter(function (h) { return h.type === 'first' && h.date === u.first; })[0];
+    items.push('<div class="tl-i done"><span class="tl-dot">✓</span><div class="grow"><span class="t">첫 공부</span><span class="s">' + esc(mdw(u.first)) + (h0 && typeof h0.holes === 'number' ? ' · 구멍 ' + h0.holes + '군데' : '') + '</span></div></div>');
+    for (var j = 1; j <= 3; j++) {
+      var r = u.reviews[j - 1];
+      var cls = '', pill = '', s = '';
+      if (r.done) {
+        cls = 'done';
+        var hr = u.history.filter(function (h) { return h.type === 'review' && h.k === j && h.date === r.done; })[0];
+        pill = '<span class="pill pill-done">마침</span>';
+        s = esc(mdw(r.done)) + (r.rating ? ' · ' + esc(ratingLabel(r.rating)) : '') + (hr && typeof hr.holes === 'number' ? ' · 구멍 ' + hr.holes + '군데' : '');
+      } else if (!r.due) {
+        pill = '<span class="pill pill-skip">건너뜀</span>';
+        s = '시험 날짜에 가까워서 잡지 않았어요';
+      } else if (r.due < T) {
+        cls = 'late'; pill = '<span class="pill pill-late">' + E.diffDays(T, r.due) + '일 밀림</span>'; s = esc(mdw(r.due));
+      } else if (r.due === T) {
+        cls = 'due'; pill = '<span class="pill pill-today">오늘</span>'; s = esc(mdw(r.due));
+      } else {
+        pill = '<span class="pill pill-next">' + esc(rel(r.due)) + '</span>'; s = esc(mdw(r.due)) + (r.manual ? ' · 직접 옮긴 날짜' : '');
+      }
+      items.push('<div class="tl-i ' + cls + '"><span class="tl-dot">' + (r.done ? '✓' : j) + '</span><div class="grow"><span class="t">' + j + '차 복습</span><span class="s">' + s + '</span></div>' + pill + '</div>');
+    }
+    var fs = finalStart(u);
+    if (fs) items.push('<div class="tl-i ' + (u.finalDone ? 'done' : '') + '"><span class="tl-dot">' + (u.finalDone ? '✓' : '총') + '</span><div class="grow"><span class="t">총복습</span><span class="s">' + esc(mdw(fs)) + '부터 시험 전날까지' + (u.finalDone ? ' · ' + (u.finalWeak ? '약한 단원으로 표시' : '떠올랐어요') : '') + '</span></div></div>');
+    var k = E.nextPending(u);
+    html += '<section class="card"><div class="card-h"><h2 class="h3">복습 날짜</h2><span class="small">꺼낸 날 ' + retrievalDays(u) + '번</span></div><div class="tl">' + items.join('') + '</div>' +
+      (k ? '<div class="row"><button class="btn btn-sm" data-act="move-review" data-id="' + u.id + '">' + k + '차 날짜 바꾸기</button><button class="btn btn-sm" data-act="unit-ics" data-id="' + u.id + '">달력에 넣기</button></div>' : '') +
+      (row ? '<p class="small">' + esc(row.label) + ' 줄: ' + esc(row.text) + '. 날짜는 처음 공부한 날부터 세요. 복습을 마칠 때마다 다음 날짜를 다시 잡아요.</p>' : '') + '</section>';
+
+    var tr = holesTrend(u);
+    if (tr.length >= 2) html += '<section class="card soft flat"><h2 class="h3">구멍이 줄고 있나요</h2><p class="num" style="font-size:20px;font-weight:800">' + tr.map(function (x) { return x; }).join(' → ') + '</p><p class="small">덮고 꺼낸 뒤 색 펜으로 채운 자리의 수예요. 같은 단원의 구멍이 줄어드는 것을 눈으로 확인해요. (책 부록 5)</p></section>';
+
+    // 카드
+    html += '<section class="stack"><div class="card-h"><h2 class="h2">질문 카드 ' + u.cards.length + '장</h2><div class="row">' + (u.cards.length ? '<button class="btn btn-sm" data-act="start-cards" data-id="' + u.id + '">카드만 돌리기</button>' : '') + '<button class="btn btn-sm btn-primary" data-act="add-card" data-id="' + u.id + '">＋ 카드</button></div></div>';
+    if (u.cards.length) {
+      html += '<div class="list">' + u.cards.map(function (c) {
+        return '<button class="li" data-act="edit-card" data-id="' + u.id + '" data-card="' + c.id + '"><div class="grow"><span class="t">' + esc(c.q) + '</span><span class="s">' + esc(c.a) + '</span></div><span class="small num">' + (c.wrong ? '틀림 ' + c.wrong : '') + '</span></button>';
+      }).join('') + '</div><p class="small">한 장에 질문 하나, 답은 한 줄. 맞힌 카드도 빼지 않고 다음 복습 날에 다시 봐요. (책 4장)</p>';
+    } else {
+      html += '<p class="small">덮고 꺼낸 뒤 구멍 난 자리만 카드로 만들어요. 교재의 모든 문장을 옮기지 않아요. 종이 카드를 써도 돼요.</p>';
+    }
+    html += '</section>';
+
+    var ws = data.wrongs.filter(function (w) { return w.unitId === u.id; });
+    if (ws.length) html += '<section class="stack"><h2 class="h3">이 단원의 오답</h2><div class="list">' + ws.map(wrongRow).join('') + '</div></section>';
+
+    html += '<section class="row"><button class="btn btn-sm" data-act="edit-unit" data-id="' + u.id + '">이름·과목 고치기</button>' + (u.first === T ? '<button class="btn btn-sm" data-act="start-first" data-id="' + u.id + '">덮고 꺼내기 기록</button>' : '') + '<button class="btn btn-sm btn-bad" data-act="delete-unit" data-id="' + u.id + '">단원 지우기</button></section>';
+    return html;
+  }
+  function ratingLabel(id) { for (var i = 0; i < RATINGS.length; i++) if (RATINGS[i].id === id) return RATINGS[i].label; return ''; }
+
+  // ================= 달력 =================
+  var calMonth = null, calSel = null;
+  function calendarView() {
+    var T = today();
+    if (!calMonth) calMonth = T.slice(0, 7);
+    if (!calSel) calSel = T;
+    var y = +calMonth.slice(0, 4), m = +calMonth.slice(5, 7);
+    var first = calMonth + '-01';
+    var start = E.addDays(first, -wd(first));
+    var ex = examDate(), fin = ex ? E.addDays(ex, -E.FINAL_DAYS) : null;
+    var cells = WD.map(function (w, i) { return '<div class="wd' + (i === 0 ? ' sun' : i === 6 ? ' sat' : '') + '">' + w + '</div>'; }).join('');
+    for (var i = 0; i < 42; i++) {
+      var d = E.addDays(start, i);
+      if (i >= 35 && d.slice(0, 7) !== calMonth) break;
+      var pend = pendingOn(d).length;
+      var late = 0;
+      if (d === T) late = dueItems().filter(function (x) { return x.late > 0; }).length;
+      var done = doneOn(d).filter(function (x) { return x.h.type === 'review' || x.h.type === 'extra' || x.h.type === 'final'; }).length;
+      var cls = 'day' + (d.slice(0, 7) !== calMonth ? ' out' : '') + (d === T ? ' is-today' : '') + (d === calSel ? ' sel' : '') + (ex && d === ex ? ' exam' : (fin && d >= fin && d < ex ? ' final' : ''));
+      var badge = '';
+      if (ex && d === ex) badge = '<span class="ex">시험</span>';
+      else if (d < T && done) badge = '<span class="c done">' + done + '</span>';
+      else if (pend || late) badge = '<span class="c' + (late ? ' late' : '') + '">' + (pend + late) + '</span>';
+      cells += '<button class="' + cls + '" data-act="cal-day" data-d="' + d + '" aria-label="' + esc(mdw(d)) + (pend ? ' 복습 ' + pend + '개' : '') + '"><span class="n">' + (+d.slice(8)) + '</span>' + badge + '</button>';
+    }
+    var sel = calSel;
+    var pendSel = sel === T ? dueItems().map(function (x) { return { u: x.u, k: x.k }; }) : pendingOn(sel);
+    var doneSel = doneOn(sel);
+    var selHtml = '<section class="stack"><h2 class="h3">' + esc(mdw(sel)) + (sel === T ? ' · 오늘' : '') + '</h2>';
+    if (ex && sel === ex) selHtml += '<p><b>시험 날이에요.</b></p>';
+    if (pendSel.length) selHtml += '<div class="list">' + pendSel.map(function (x) { return '<a class="li" href="#unit-' + x.u.id + '"><div class="grow"><span class="t">' + esc(x.u.name) + '</span><span class="s">' + x.k + '차 복습' + (x.u.subject ? ' · ' + esc(x.u.subject) : '') + '</span></div><span class="chev">›</span></a>'; }).join('') + '</div>';
+    if (doneSel.length) selHtml += '<div class="list">' + doneSel.map(function (x) {
+      var lbl = x.h.type === 'first' ? '첫 공부' : x.h.type === 'review' ? x.h.k + '차 복습 마침' : x.h.type === 'final' ? '총복습' : '한 번 더 꺼내기';
+      return '<a class="li" href="#unit-' + x.u.id + '"><div class="grow"><span class="t">' + esc(x.u.name) + '</span><span class="s">' + lbl + (typeof x.h.holes === 'number' ? ' · 구멍 ' + x.h.holes : '') + '</span></div><span class="pill pill-done">✓</span></a>';
+    }).join('') + '</div>';
+    if (!pendSel.length && !doneSel.length && !(ex && sel === ex)) selHtml += '<p class="small">이날 잡힌 복습이 없어요.</p>';
+    selHtml += '</section>';
+    return '<section class="stack"><h1 class="h1">달력</h1></section>' +
+      '<section class="card"><div class="cal-h"><button class="icon-btn" data-act="cal-prev" aria-label="지난달">‹</button><h2 class="h3 num">' + y + '년 ' + m + '월</h2><button class="icon-btn" data-act="cal-next" aria-label="다음 달">›</button></div>' +
+      '<div class="cal">' + cells + '</div>' +
+      '<div class="legend"><span><i style="background:var(--brand-soft)"></i>잡힌 복습</span><span><i style="background:var(--bad-soft)"></i>밀린 복습</span><span><i style="background:var(--ok-soft)"></i>마친 복습</span><span><i style="background:var(--accent-soft)"></i>총복습 기간</span></div>' +
+      (calMonth !== T.slice(0, 7) ? '<button class="btn btn-sm btn-ghost" data-act="cal-today">이번 달로</button>' : '') +
+      '</section>' + selHtml;
+  }
+
+  // ================= 더보기 =================
+  function moreView() {
+    function li(href, t, s) { return '<a class="li" href="#' + href + '"><div class="grow"><span class="t">' + t + '</span>' + (s ? '<span class="s">' + s + '</span>' : '') + '</div><span class="chev">›</span></a>'; }
+    var ex = data.exam;
+    return '<section class="stack"><h1 class="h1">더보기</h1></section>' +
+      '<div class="list">' +
+        li('exam', '시험 정보', esc((ex.name || '내 시험') + ' · ' + ymd(ex.date) + (ex.provisional ? ' (임시)' : ''))) +
+        li('remind', '복습 알림 걸기', '휴대폰 달력이 날마다 알려 줘요') +
+      '</div>' +
+      '<div class="list">' +
+        li('wrongs', '오답 한 줄 기록', '몰·헷·읽·시로 틀린 이유 나누기 (책 6장)') +
+        li('diag', '열다섯 문항 자가 진단', '내 암기가 새는 자리 찾기 (책 1장)') +
+      '</div>' +
+      '<div class="list">' +
+        li('backup', '백업과 기기 옮기기', '기록을 파일이나 글자로 옮겨요') +
+        li('install', '홈 화면에 설치하기', isStandalone() ? '설치해서 쓰고 있어요' : '앱처럼 열고, 인터넷 없이도 써요') +
+      '</div>' +
+      '<div class="list">' +
+        li('guide', '처음 쓰는 분을 위한 사용법') +
+        li('evidence', '복습 날짜를 정하는 근거', '책의 간격표와 앱이 정한 것') +
+        li('privacy', '기록은 어디에 저장되나요') +
+        li('about', '이 앱과 책 「암기 처방전」') +
+      '</div>' +
+      '<section class="card flat"><h2 class="h3">하루 복습 시간</h2><p class="small">7일 예보에서 이 시간을 넘는 날을 주홍으로 보여 줘요. 책 13장의 퇴근 뒤 두 시간 판은 복습 20분이에요.</p>' +
+        '<div class="seg" role="group" aria-label="하루 복습 시간">' + [20, 30, 45, 60, 90].map(function (m) { return '<button data-act="set-budget" data-v="' + m + '" aria-pressed="' + (data.settings.budget === m) + '">' + m + '분</button>'; }).join('') + '</div>' +
+        '<label class="check"><input type="checkbox" id="set-sound"' + (data.settings.sound ? ' checked' : '') + '> 덮고 꺼내기 시간이 끝나면 소리와 진동으로 알려 주기</label>' +
+      '</section>' +
+      '<p class="small center">암기 처방전 복습 알림 ' + VERSION + '</p>';
+  }
+
+  function examView() {
+    var ex = data.exam;
+    return '<section class="stack"><a class="btn btn-text" href="#more" style="align-self:flex-start">‹ 더보기</a><h1 class="h1">시험 정보</h1><p class="sub">시험 날짜를 바꾸면 마치지 않은 복습 날짜를 다시 계산해요. 마친 복습 기록은 그대로 둬요.</p></section>' +
+      '<form class="card" id="exam-edit" novalidate>' +
+        '<div class="field"><label for="ee-name">시험 이름</label><input type="text" id="ee-name" maxlength="40" value="' + esc(ex.name || '') + '" placeholder="예: 공인중개사 1차" autocomplete="off"></div>' +
+        '<div class="field"><label for="ee-date">시험 날짜</label><input type="date" id="ee-date" value="' + esc(ex.date) + '"></div>' +
+        '<p class="err" id="ee-err" hidden></p>' +
+        '<button class="btn btn-primary btn-block" type="submit">저장</button>' +
+      '</form>';
+  }
+
+  // ================= 알림 =================
+  function remindView() {
+    var t = data.settings.remind;
+    var preset = ICS_PRESETS.indexOf(t) >= 0;
+    var icsHref = 'ics/daily-' + t.replace(':', '') + '.ics';
+    return '<section class="stack"><a class="btn btn-text" href="#more" style="align-self:flex-start">‹ 더보기</a><h1 class="h1">복습 알림 걸기</h1>' +
+      '<p class="sub">이 앱은 기록을 휴대폰 밖으로 보내지 않아요. 그래서 알림은 휴대폰 달력이 대신 울려 줘요. 날마다 같은 시각에 알림이 오면 앱을 열어 오늘 복습을 확인해요.</p></section>' +
+      '<section class="card"><h2 class="h3">1. 몇 시에 알려 드릴까요?</h2>' +
+        '<div class="seg" role="group" aria-label="알림 시각">' + ICS_PRESETS.map(function (p) { return '<button data-act="set-remind" data-v="' + p + '" aria-pressed="' + (t === p) + '">' + p + '</button>'; }).join('') + '</div>' +
+        '<div class="field"><label for="remind-time">다른 시각</label><input type="time" id="remind-time" value="' + esc(t) + '"></div>' +
+      '</section>' +
+      '<section class="card"><h2 class="h3">2. 쓰는 달력을 골라요</h2>' +
+        '<div class="stack">' +
+          '<a class="btn btn-primary btn-block" href="' + esc(gcalDaily(t)) + '" target="_blank" rel="noopener">구글 캘린더에 날마다 ' + esc(t) + ' 넣기</a>' +
+          '<p class="small">안드로이드 휴대폰 대부분이 쓰는 달력이에요. 구글 캘린더가 열리면 "저장"을 눌러요. 알림이 몇 분 전에 울릴지는 구글 캘린더 설정을 따라요.</p>' +
+          (preset && !IN_FRAME
+            ? '<a class="btn btn-block" href="' + icsHref + '" target="_blank" rel="noopener">아이폰 캘린더 · 삼성 캘린더에 넣기</a>'
+            : '<button class="btn btn-block" data-act="daily-ics">아이폰 캘린더 · 삼성 캘린더에 넣기</button>') +
+          '<p class="small">달력 파일(.ics)을 열어요. 아이폰은 "모두 추가", 삼성 캘린더는 "저장"을 누르면 날마다 ' + esc(t) + '에 알림이 와요.</p>' +
+        '</div>' +
+      '</section>' +
+      '<section class="card soft flat"><h2 class="h3">단원마다 복습 날짜를 넣고 싶다면</h2><p class="small">단원 화면의 "달력에 넣기"를 누르면 그 단원의 1·2·3차 복습 날짜가 달력 파일로 나와요. 다만 복습을 마칠 때마다 다음 날짜가 바뀔 수 있어서, 날마다 한 번 울리는 알림을 먼저 권해요.</p></section>';
+  }
+
+  // ================= 백업 =================
+  function importFormHtml() {
+    return '<label class="btn btn-block" for="import-file">백업 파일 고르기</label><input type="file" id="import-file" accept=".json,application/json,text/plain" class="vh">' +
+      '<div class="field"><label for="import-text">또는 복사해 둔 글자를 붙여 넣기</label><textarea id="import-text" placeholder="{&quot;schema&quot;:1, ..."></textarea></div>' +
+      '<button class="btn btn-block" data-act="import-text">붙여 넣은 글자로 불러오기</button>' +
+      '<p class="err" id="import-err" hidden></p>';
+  }
+  function bindImport(scope) {
+    var fi = $('#import-file', scope);
+    if (fi) fi.addEventListener('change', function () {
+      var f = fi.files && fi.files[0]; if (!f) return;
+      var rd = new FileReader();
+      rd.onload = function () { importData(rd.result); };
+      rd.onerror = function () { toast('파일을 읽지 못했어요'); };
+      rd.readAsText(f);
+    });
+  }
+  function backupView() {
+    var json = JSON.stringify(data);
+    var kb = Math.max(1, Math.round(json.length / 1024));
+    return '<section class="stack"><a class="btn btn-text" href="#more" style="align-self:flex-start">‹ 더보기</a><h1 class="h1">백업과 기기 옮기기</h1>' +
+      '<p class="sub">기록은 이 브라우저 안에만 있어요. 휴대폰을 바꾸거나 브라우저 기록을 지우면 사라지니 가끔 백업해 두세요.</p></section>' +
+      '<section class="card"><h2 class="h3">백업 만들기</h2><p class="small">단원 ' + data.units.length + '개 · 카드 ' + allCards().length + '장 · 오답 ' + data.wrongs.length + '개 · 약 ' + kb + 'KB</p>' +
+        '<button class="btn btn-primary btn-block" data-act="export-file">백업 파일로 저장</button>' +
+        '<button class="btn btn-block" data-act="export-copy">글자로 복사 (메모장이나 카톡 나에게 보내기에 붙여 넣기)</button>' +
+        '<textarea class="input" id="copy-fallback" hidden readonly aria-label="복사할 백업 글자"></textarea>' +
+      '</section>' +
+      '<section class="card"><h2 class="h3">백업 불러오기</h2><p class="small">불러오면 지금 기록을 백업 내용으로 바꿔요.</p>' + importFormHtml() + '</section>' +
+      '<section class="card flat"><h2 class="h3">모든 기록 지우기</h2><p class="small">이 기기에 있는 단원, 카드, 오답, 진단 기록을 모두 지우고 처음 화면으로 돌아가요. 되돌릴 수 없어요.</p><button class="btn btn-bad btn-block" data-act="wipe">모든 기록 지우기</button></section>';
+  }
+
+  // ================= 설치 =================
+  function isStandalone() {
+    try { return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; } catch (e) { return false; }
+  }
+  var deferredPrompt = null;
+  function installView() {
+    var html = '<section class="stack"><a class="btn btn-text" href="#more" style="align-self:flex-start">‹ 더보기</a><h1 class="h1">홈 화면에 설치하기</h1>' +
+      '<p class="sub">설치하면 앱처럼 아이콘을 눌러 열고, 인터넷이 없어도 열려요. 앱 장터를 거치지 않고 설치 파일도 없어요.</p></section>';
+    if (isStandalone()) html += '<div class="banner banner-info"><div class="grow"><b>이미 설치해서 쓰고 있어요.</b></div></div>';
+    if (IN_FRAME) html += '<div class="banner banner-warn"><div class="grow"><b>지금은 미리보기 화면이라 설치할 수 없어요.</b><span>공개한 앱 주소를 휴대폰 브라우저로 열면 설치할 수 있어요.</span></div></div>';
+    if (IN_APP) html += '<div class="banner banner-warn"><div class="grow"><b>앱 안의 브라우저에서는 설치가 안 돼요.</b><span>오른쪽 위 메뉴에서 "다른 브라우저로 열기"를 눌러 크롬이나 사파리로 열어 주세요.</span></div></div>';
+    if (deferredPrompt) html += '<button class="btn btn-primary btn-lg btn-block" data-act="install">지금 설치하기</button>';
+    html += '<section class="card"><h2 class="h3">아이폰 (사파리)</h2><ol class="tips"><li>사파리로 이 앱 주소를 열어요.</li><li>아래쪽 가운데의 공유 단추(네모에서 화살표가 나가는 모양)를 눌러요.</li><li>"홈 화면에 추가"를 누르고, 오른쪽 위 "추가"를 눌러요.</li></ol><p class="small">아이폰은 꼭 설치해서 쓰세요. 사파리로만 쓰다가 한동안 들어오지 않으면 브라우저가 기록을 지울 수 있어요.</p></section>' +
+      '<section class="card"><h2 class="h3">안드로이드 (크롬, 삼성 인터넷)</h2><ol class="tips"><li>크롬으로 이 앱 주소를 열어요.</li><li>오른쪽 위 ⋮ 를 눌러요. 삼성 인터넷은 아래쪽 ≡ 를 눌러요.</li><li>"홈 화면에 추가" 또는 "앱 설치"를 눌러요.</li></ol></section>' +
+      '<p class="small">휴대폰마다 메뉴 이름이 조금 다를 수 있어요.</p>';
+    return html;
+  }
+
+  // ================= 사용법·근거·개인정보·소개 =================
+  function back() { return '<a class="btn btn-text" href="#more" style="align-self:flex-start">‹ 더보기</a>'; }
+  function guideView() {
+    return '<section class="stack">' + back() + '<h1 class="h1">처음 쓰는 분을 위한 사용법</h1><p class="sub">하루에 한 번, 복습부터 하고 새 진도를 나가요.</p></section>' +
+      '<section class="card"><div class="step-no">1. 공부한 날</div><p>오늘 공부한 단원을 넣어요. 하루치 분량을 한 단원으로 잡으면 돼요. 시험까지 남은 날에 맞춰 1·2·3차 복습 날짜가 바로 잡혀요.</p><p class="small">첫날은 소제목마다 읽고, 덮고, 3~10분 떠올려 쓰고, 펴서 색 펜으로 맞춰 봐요. 색 펜으로 채운 구멍만 질문 카드로 만들어요.</p></section>' +
+      '<section class="card"><div class="step-no">2. 복습 날</div><p>알림이 오면 앱을 열어요. "오늘의 복습 처방"에 나온 단원의 "시작"을 눌러요.</p><ol class="tips"><li>책을 펴기 전에 5분 동안 떠올려 써요. 막혀도 2분은 버텨요.</li><li>질문 카드를 한 바퀴 돌려요. 답을 속으로 끝까지 말한 뒤에 뒤집어요.</li><li>책을 펴서 못 떠올린 것과 틀린 것만 확인해요.</li><li>얼마나 떠올랐는지 고르면 다음 복습 날짜가 잡혀요.</li></ol></section>' +
+      '<section class="card"><div class="step-no">3. 시험 2주 전</div><p>총복습 기간이에요. 과목마다 목차를 적고 단원마다 핵심 세 가지를 떠올려요. 안 떠오르는 단원은 "약해요"를 누르고 한 번 더 꺼내요.</p></section>' +
+      '<section class="card"><div class="step-no">밀렸을 때</div><p>하루이틀 밀려도 괜찮아요. 건너뛰지만 마세요. 너무 바쁜 날은 복습 20분만 하고 새 진도를 쉬어요. 사흘 넘게 빠졌으면 새 진도를 멈추고 이틀 동안 복습만 해요. (책 5장, 13장)</p></section>' +
+      '<section class="card flat"><h2 class="h3">알림 걸기</h2><p>더보기 › 복습 알림 걸기에서 날마다 한 번 휴대폰 달력이 울리게 해 두세요.</p><a class="btn" href="#remind">알림 걸러 가기</a></section>';
+  }
+  function evidenceView() {
+    var rows = E.ROWS.map(function (r) {
+      var range = r.id === '2w' ? '21일까지' : r.id === '1y' ? '271일부터' : r.min + '일부터';
+      return '<tr><td><b>' + esc(r.label) + '</b><br><span class="small">' + range + '</span></td><td>' + r.r1 + '일 뒤</td><td>' + r.r2 + '일 뒤</td><td>' + (r.r3 ? r.r3 + '일 뒤<br><span class="small">늦어도 시험 3일 전</span>' : '시험 ' + r.r3Before + '일 전') + '</td></tr>';
+    }).join('');
+    return '<section class="stack">' + back() + '<h1 class="h1">복습 날짜를 정하는 근거</h1><p class="sub">책 「암기 처방전」 5장의 간격표와 부록 엑셀 "복습 날짜 계산기"와 같은 규칙으로 계산해요.</p></section>' +
+      '<section class="card"><h2 class="h3">남은 날로 정하는 복습 간격표</h2><div class="tbl-wrap"><table class="tbl"><thead><tr><th>남은 날</th><th>1차</th><th>2차</th><th>3차</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+      '<p class="small">"남은 날"은 처음 공부한 날부터 시험까지의 날 수예요. "며칠 뒤"는 모두 처음 공부한 날부터 센 날짜예요. 시험이 석 달 넘게 남았다면 시험 14일 전부터 전 범위를 다시 꺼내는 총복습을 해요.</p></section>' +
+      '<section class="card"><h2 class="h3">책에서 가져온 것</h2><ul class="tips">' +
+        '<li>첫 복습 날짜는 1,354명이 참여한 실험에서 가져왔어요. 시험까지 기간이 길수록 가장 좋았던 복습 간격도 길었어요. (Cepeda 등, 2008)</li>' +
+        '<li>"그 뒤 넓은 간격으로 세 번 더"는 대학생 533명 연구의 권고예요. (Rawson &amp; Dunlosky, 2011)</li>' +
+        '<li>간격이 가장 좋은 값보다 짧으면 손해가 가파르고, 길면 천천히 줄었어요. 그래서 헷갈리면 길게 잡아요.</li>' +
+        '<li>복습은 다시 읽기가 아니라 꺼내기로 해요. 한 번 읽고 세 번 꺼낸 조가 일주일 뒤 61%, 네 번 읽은 조는 40%를 기억했어요. (Roediger &amp; Karpicke, 2006)</li>' +
+        '<li>간격표는 두 연구를 묶어 지은이가 만든 실천표예요. 6개월 줄은 실험에 없는 기간이라 어림한 값이에요.</li>' +
+      '</ul></section>' +
+      '<section class="card"><h2 class="h3">앱이 정한 것 (책에 숫자가 없는 부분)</h2><ul class="tips">' +
+        '<li>어느 줄을 쓸지 가르는 날 수(22일, 61일, 136일, 271일)와, 3차 복습을 시험 3일 전까지로 당기는 규칙, 시험 날과 겹치는 복습을 건너뛰는 규칙은 부록 엑셀 계산기와 같아요.</li>' +
+        '<li>복습 날 "술술 다 나왔어요"는 다음 간격을 1.5배로, "3분의 1도 안 나왔어요"는 0.7배로 바꿔요. 책은 늘리고 줄이라고만 해서 배수는 앱이 정했어요.</li>' +
+        '<li>복습이 밀리면 실제로 복습한 날부터 다음 간격을 세요.</li>' +
+        '<li>7일 예보의 시간은 1차 15분, 2차 10분, 3차 5분으로 어림했어요.</li>' +
+        '<li>시험 날짜를 모르면 임시로 석 달 뒤로 잡아요.</li>' +
+      '</ul><p class="small">이 앱은 공부법을 돕는 도구예요. 의학적인 처방이나 진료를 대신하지 않아요. 평균에서 통한 방법이 나에게도 통하는지는 해 봐야 알아요. 한 과목을 골라 2주만 시험해 보세요.</p></section>';
+  }
+  function privacyView() {
+    return '<section class="stack">' + back() + '<h1 class="h1">기록은 어디에 저장되나요</h1></section>' +
+      '<section class="card"><ul class="tips">' +
+        '<li>시험, 단원, 카드, 오답, 진단 기록은 모두 이 휴대폰의 브라우저 안에만 저장돼요.</li>' +
+        '<li>서버로 보내지 않아요. 가입, 로그인, 광고, 방문 통계가 없어요.</li>' +
+        '<li>같은 휴대폰이라도 브라우저가 다르면 기록이 따로예요. 카카오톡이나 SNS 앱 안에서 연 화면도 따로예요.</li>' +
+        '<li>브라우저의 방문 기록과 사이트 데이터를 지우면 앱 기록도 지워져요. 가끔 백업해 두세요.</li>' +
+        '<li>아이폰 사파리는 홈 화면에 추가하지 않은 사이트에 한동안 들어오지 않으면 그 사이트의 기록을 지울 수 있어요. 아이폰은 설치해서 쓰세요.</li>' +
+      '</ul></section>' +
+      '<div class="row"><a class="btn" href="#backup">백업하러 가기</a><a class="btn" href="#install">설치하는 법</a></div>';
+  }
+  function aboutView() {
+    return '<section class="stack">' + back() + '<h1 class="h1">이 앱과 책</h1></section>' +
+      '<section class="card"><div class="eyebrow">책</div><h2 class="h2">「암기 처방전」</h2><p>공부만했던의사 지음. 자격증, 공무원, 국가고시처럼 외울 것이 많은 시험을 준비하는 분을 위한 암기법 책이에요. 논문으로 근거를 확인한 처방 열 가지와 4주 복습 계획표, 시험 유형별 적용 예가 들어 있어요.</p>' +
+      (CFG.bookUrl ? '<a class="btn btn-primary" href="' + esc(CFG.bookUrl) + '" target="_blank" rel="noopener">책 보러 가기</a>' : '') +
+      '<p class="small">이 앱은 책의 처방 1~3(백지 인출, 질문 카드, 간격 복습)을 날마다 쓰기 쉽게 옮긴 것이에요. 근거와 나머지 처방은 책에 있어요.</p></section>' +
+      '<section class="card flat"><h2 class="h3">만든 것과 쓴 것</h2><ul class="tips"><li>버전 ' + VERSION + '</li><li>제목 글꼴: Noto Serif KR (SIL Open Font License 1.1)의 일부 글자</li><li>"처방전"은 비유예요. 이 앱은 공부법 앱이고, 의학적인 처방이나 진료를 대신하지 않아요.</li></ul></section>';
+  }
+
+  // ================= 자가 진단 =================
+  var diagAns = null;
+  function diagView() {
+    if (!diagAns) diagAns = DIAG.map(function () { return false; });
+    var last = data.diags.length ? data.diags[data.diags.length - 1] : null;
+    var html = '<section class="stack">' + back() + '<h1 class="h1">열다섯 문항 자가 진단</h1><p class="sub">요즘 내 공부를 떠올리면서 "예"인 것에 표시해요. 솔직할수록 처방이 정확해져요. (책 1장)</p></section>';
+    html += '<section class="list">' + DIAG.map(function (q, i) {
+      return '<label class="li" for="dg-' + i + '"><div class="grow"><span class="s">' + q[0] + '</span><span>' + esc(q[1]) + '</span></div><input type="checkbox" class="dg" id="dg-' + i + '" data-i="' + i + '"' + (diagAns[i] ? ' checked' : '') + ' style="width:24px;height:24px;flex:none;margin:0;accent-color:var(--brand)"></label>';
+    }).join('') + '</section>';
+    html += '<button class="btn btn-primary btn-lg btn-block" data-act="diag-done">결과 보기</button>';
+    html += '<p class="small">이 진단표는 연구로 검증된 검사가 아니에요. 책의 처방을 찾아가는 길잡이로 지은이가 만든 표예요. 오늘 한 번, 4주 뒤에 한 번 해 보세요.</p>';
+    if (data.diags.length) {
+      html += '<section class="card"><h2 class="h3">지난 진단</h2><div class="tbl-wrap"><table class="tbl"><thead><tr><th>날짜</th>' + DIAG_GROUPS.map(function (g) { return '<th>' + g.id + '</th>'; }).join('') + '</tr></thead><tbody>' +
+        data.diags.slice(-6).map(function (d) {
+          return '<tr><td class="num">' + esc(md(d.date)) + '</td>' + DIAG_GROUPS.map(function (g) { var c = groupCount(d.answers, g.id); return '<td class="num"' + (c >= 2 ? ' style="color:var(--accent-ink);font-weight:800"' : '') + '>' + c + '</td>'; }).join('') + '</tr>';
+        }).join('') + '</tbody></table></div><p class="small">묶음마다 "예"의 수예요. 두 개 이상인 묶음이 먼저 고칠 자리예요.</p></section>';
+    }
+    if (last) html += diagResult(last);
+    return html;
+  }
+  function groupCount(ans, gid) { var c = 0; DIAG.forEach(function (q, i) { if (q[0].charAt(0) === gid && ans[i]) c++; }); return c; }
+  function diagResult(d) {
+    var hits = DIAG_GROUPS.filter(function (g) { return groupCount(d.answers, g.id) >= 2; });
+    var order = ['가', '나', '마', '다', '라'];
+    hits.sort(function (a, b) { return order.indexOf(a.id) - order.indexOf(b.id); });
+    var html = '<section class="card" id="diag-result"><div class="eyebrow">' + esc(ymd(d.date)) + ' 결과</div>';
+    if (!hits.length) return html + '<h2 class="h2">"예"가 두 개 이상인 묶음이 없어요</h2><p>지금 방법을 이어 가세요. 4주 뒤에 한 번 더 해 보세요.</p></section>';
+    html += '<h2 class="h2">새는 자리 ' + hits.length + '곳</h2>' + hits.map(function (g) {
+      return '<div class="stack" style="gap:4px"><b>' + g.id + ' 묶음 · ' + esc(g.name) + '</b><span class="small">' + esc(g.why) + '</span><span>먼저 읽을 처방: ' + esc(g.rx) + '</span><span class="small">앱에서는: ' + esc(g.app) + '</span></div>';
+    }).join('<hr style="border:0;border-top:1px solid var(--line);margin:4px 0">');
+    if (hits.length > 1) html += '<p class="small">여러 곳이면 가, 나, 마 순서로 먼저 고치세요. 근거가 가장 튼튼한 처방이 그쪽에 있어요. (책 1장)</p>';
+    return html + '</section>';
+  }
+
+  // ================= 오답 =================
+  var wrongMark = '몰', wrongShowAll = false;
+  function wrongRow(w) {
+    var u = w.unitId ? unitById(w.unitId) : null;
+    return '<div class="li"><div class="grow"><span class="t"><span class="chip">' + esc(w.mark) + '</span> ' + esc(w.src || '문제') + '</span><span class="s">' + esc(md(w.date)) + (w.why ? ' · ' + esc(w.why) : '') + (u ? ' · ' + esc(u.name) : '') + (w.redo ? ' · ' + esc(md(w.redo)) + ' 다시 풂' : '') + '</span></div>' +
+      (w.redo ? '<span class="pill pill-done">다시 풂</span>' : '<button class="btn btn-sm" data-act="wrong-redo" data-w="' + w.id + '">다시 풀었어요</button>') +
+      '<button class="icon-btn" data-act="wrong-del" data-w="' + w.id + '" aria-label="지우기">×</button></div>';
+  }
+  function wrongsView() {
+    var T = today();
+    var monday = E.addDays(T, -((wd(T) + 6) % 7));
+    var week = data.wrongs.filter(function (w) { return w.date >= monday && w.date <= T; });
+    var counts = {}; MARKS.forEach(function (m) { counts[m.id] = 0; });
+    week.forEach(function (w) { counts[w.mark] = (counts[w.mark] || 0) + 1; });
+    var list = data.wrongs.slice().sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; });
+    if (!wrongShowAll) list = list.filter(function (w) { return !w.redo; });
+    var units = data.units.slice().sort(function (a, b) { return cmpKo(a.subject + a.name, b.subject + b.name); });
+    var tip = '';
+    if (counts['몰'] >= 3 && counts['몰'] >= counts['헷']) tip = '이번 주는 "몰"이 많아요. 넣기가 부족한 것이에요.';
+    else if (counts['헷'] >= 3) tip = '이번 주는 "헷"이 많아요. 구별 연습이 부족한 것이에요. 헷갈리는 짝을 한 표에 나란히 적어 보세요. (책 7장)';
+    return '<section class="stack">' + back() + '<h1 class="h1">오답 한 줄 기록</h1><p class="sub">틀린 문제마다 한 줄만 적어요. 문제를 오려 붙이거나 해설을 옮겨 적지 않아요. (책 6장)</p></section>' +
+      '<form class="card" id="wrong-form" novalidate>' +
+        '<div class="field"><label for="w-src">문제 (교재와 번호)</label><input type="text" id="w-src" maxlength="60" placeholder="예: 기출 2025년 7번" autocomplete="off"></div>' +
+        '<div class="field"><span class="lbl" id="w-mark-l">왜 틀렸나요?</span><div class="seg" role="group" aria-labelledby="w-mark-l">' + MARKS.map(function (m) { return '<button type="button" data-act="w-mark" data-v="' + m.id + '" aria-pressed="' + (wrongMark === m.id) + '"><b>' + m.id + '</b> ' + m.label + '</button>'; }).join('') + '</div>' +
+          '<p class="hint" id="w-todo">할 일: ' + esc(markTodo(wrongMark)) + '</p></div>' +
+        '<div class="field"><label for="w-why">틀린 이유 한 줄</label><input type="text" id="w-why" maxlength="80" placeholder="예: 공고 20일과 의결 60일을 바꿔 기억함" autocomplete="off"></div>' +
+        (units.length ? '<div class="field"><label for="w-unit">어느 단원인가요? (고르면 그 단원 복습 날에 다시 풀라고 알려 줘요)</label><select id="w-unit"><option value="">고르지 않기</option>' + units.map(function (u) { return '<option value="' + u.id + '">' + esc((u.subject ? u.subject + ' · ' : '') + u.name) + '</option>'; }).join('') + '</select></div>' : '') +
+        '<button class="btn btn-primary btn-block" type="submit">한 줄 적기</button>' +
+      '</form>' +
+      '<section class="card"><div class="card-h"><h2 class="h3">이번 주 표시</h2><span class="small">' + esc(md(monday)) + '부터</span></div>' +
+        '<div class="row2" style="grid-template-columns:repeat(4,1fr)">' + MARKS.map(function (m) { return '<div class="center"><div style="font-family:var(--display);font-weight:900;font-size:28px" class="num">' + counts[m.id] + '</div><div class="small">' + m.id + ' · ' + m.label + '</div></div>'; }).join('') + '</div>' +
+        (tip ? '<p>' + esc(tip) + '</p>' : '<p class="small">"몰"이 많으면 넣기가, "헷"이 많으면 구별 연습이 모자란 것이에요.</p>') +
+      '</section>' +
+      '<section class="stack"><div class="card-h"><h2 class="h3">' + (wrongShowAll ? '모든 오답' : '아직 다시 안 푼 오답') + ' ' + list.length + '개</h2><button class="btn btn-sm btn-ghost" data-act="w-toggle">' + (wrongShowAll ? '다시 안 푼 것만' : '모두 보기') + '</button></div>' +
+        (list.length ? '<div class="list">' + list.map(wrongRow).join('') + '</div>' : '<p class="small">적어 둔 오답이 없어요.</p>') +
+      '</section>';
+  }
+  function markTodo(id) { for (var i = 0; i < MARKS.length; i++) if (MARKS[i].id === id) return MARKS[i].todo; return ''; }
+
+  // ================= 단원 입력 폼 =================
+  function unitFormHtml(u) {
+    var T = today();
+    var subs = subjects();
+    return '<form id="unit-form" class="stack" novalidate>' +
+      '<div class="field"><label for="u-subject">과목</label><input type="text" id="u-subject" list="u-subjects" maxlength="20" placeholder="예: 민법" value="' + esc(u ? u.subject : (subs[0] || '')) + '" autocomplete="off"><datalist id="u-subjects">' + subs.map(function (s) { return '<option value="' + esc(s) + '">'; }).join('') + '</datalist></div>' +
+      '<div class="field"><label for="u-name">단원 (범위)</label><input type="text" id="u-name" maxlength="50" placeholder="예: 3단원 물권 변동" value="' + esc(u ? u.name : '') + '" autocomplete="off" required></div>' +
+      (u ? '' : '<div class="field"><label for="u-first">처음 공부한 날</label><input type="date" id="u-first" value="' + T + '" max="' + T + '"></div>') +
+      '<label class="check"><input type="checkbox" id="u-star"' + (u && u.star ? ' checked' : '') + '> <span>시험에 자주 나와요 <span class="small">(복습이 밀렸을 때 먼저 해요)</span></span></label>' +
+      (u ? '' : '<div id="plan-preview" aria-live="polite"></div>') +
+      '<p class="err" id="u-err" hidden></p>' +
+      (u ? '<button class="btn btn-primary btn-block" type="submit">고치기</button>' :
+        '<button class="btn btn-primary btn-lg btn-block" type="submit" id="u-save">저장</button><button class="btn btn-block" type="button" data-act="save-and-first" id="u-save-first">저장하고 지금 덮고 꺼내기</button>') +
+    '</form>';
+  }
+  function planPreviewHtml(first) {
+    var ex = examDate();
+    if (!E.isDate(first)) return '';
+    var p = E.planFrom(first, ex);
+    if (!p.ok) return '<div class="plan"><span class="err">처음 공부한 날이 시험 날짜와 같거나 그 뒤예요.</span></div>';
+    var row = E.rowById(p.row);
+    var lines = p.reviews.map(function (d, i) {
+      return '<div class="plan-row' + (d ? '' : ' skip') + '"><b>' + (i + 1) + '차</b><span>' + (d ? esc(mdw(d)) + ' · ' + esc(rel(d)) : '건너뜀 (시험 날짜와 가까워요)') + '</span></div>';
+    }).join('');
+    if (p.finalStart) lines += '<div class="plan-row"><b>총복습</b><span>' + esc(mdw(p.finalStart)) + '부터</span></div>';
+    return '<div class="plan"><div class="small">시험까지 ' + p.days + '일 남아서 <b>' + esc(row.label) + ' 줄</b>(' + esc(row.text) + ')로 잡았어요.</div>' + lines + '</div>';
+  }
+  function bindUnitForm(u) {
+    var f = $('#unit-form');
+    if (!f) return;
+    var fi = $('#u-first');
+    function upd() { var pv = $('#plan-preview'); if (pv && fi) pv.innerHTML = planPreviewHtml(fi.value); }
+    if (fi) { fi.addEventListener('input', upd); fi.addEventListener('change', upd); upd(); }
+    function submit(thenFirst) {
+      var name = $('#u-name').value.trim(), subject = $('#u-subject').value.trim(), star = $('#u-star').checked;
+      var err = $('#u-err');
+      if (!name) { err.textContent = '단원 이름을 적어 주세요.'; err.hidden = false; $('#u-name').focus(); return; }
+      if (u) {
+        u.name = name; u.subject = subject; u.star = star; save(); closeSheet(); render(); toast('고쳤어요'); return;
+      }
+      var first = fi.value;
+      if (!E.isDate(first) || first > today()) { err.textContent = '처음 공부한 날은 오늘이나 그 전 날짜로 골라 주세요.'; err.hidden = false; return; }
+      var p = E.planFrom(first, examDate());
+      if (!p.ok) { err.textContent = '처음 공부한 날이 시험 날짜와 같거나 그 뒤예요.'; err.hidden = false; return; }
+      var nu = makeUnit({ name: name, subject: subject, first: first, star: star });
+      data.units.push(nu);
+      data.meta.welcomeDone = true;
+      save();
+      closeSheet(true);
+      welcomeStep = 0;
+      if (thenFirst && first === today()) { startSession('first', nu.id); }
+      var k = E.nextPending(nu);
+      if (location.hash !== '#today' && !thenFirst) go('today'); else render();
+      toast(k ? '저장했어요. ' + k + '차 복습은 ' + mdw(nu.reviews[k - 1].due) + '이에요.' : '저장했어요.');
+    }
+    f.addEventListener('submit', function (e) { e.preventDefault(); submit(false); });
+    var sf = $('#u-save-first');
+    if (sf) sf.addEventListener('click', function () { submit(true); });
+    if (fi) fi.addEventListener('change', function () { if (sf) sf.hidden = fi.value !== today(); });
+  }
+
+  // ================= 아래 창 =================
+  var sheetEl = null, sheetBack = null;
+  function openSheet(html, onOpen) {
+    closeSheet(true);
+    sheetBack = document.createElement('div'); sheetBack.className = 'backdrop'; sheetBack.setAttribute('data-act', 'sheet-close');
+    sheetEl = document.createElement('div'); sheetEl.className = 'sheet'; sheetEl.setAttribute('role', 'dialog'); sheetEl.setAttribute('aria-modal', 'true');
+    sheetEl.innerHTML = '<div class="sheet-in"><div class="grab" aria-hidden="true"></div>' + html + '</div>';
+    document.body.appendChild(sheetBack); document.body.appendChild(sheetEl);
+    if (onOpen) onOpen(sheetEl);
+    var first = sheetEl.querySelector('input:not([type=hidden]):not([type=checkbox]), textarea');
+    if (first && !first.value) setTimeout(function () { try { first.focus({ preventScroll: true }); } catch (e) {} }, 60);
+  }
+  function closeSheet(silent) {
+    if (sheetEl) { sheetEl.remove(); sheetEl = null; }
+    if (sheetBack) { sheetBack.remove(); sheetBack = null; }
+  }
+  function sheetHead(title) { return '<div class="sheet-h"><h2 class="h2">' + esc(title) + '</h2><button class="icon-btn" data-act="sheet-close" aria-label="닫기">×</button></div>'; }
+  function confirmSheet(title, body, okLabel, onOk, danger) {
+    openSheet(sheetHead(title) + '<p>' + body + '</p><div class="row2"><button class="btn" data-act="sheet-close">아니요</button><button class="btn ' + (danger ? 'btn-bad' : 'btn-primary') + '" id="cf-ok">' + esc(okLabel) + '</button></div>', function (el) {
+      $('#cf-ok', el).addEventListener('click', function () { closeSheet(); onOk(); });
+    });
+  }
+  function addUnitSheet() {
+    if (E.diffDays(examDate(), today()) <= 0) { toast('시험 날짜가 지났어요. 시험 정보를 먼저 바꿔 주세요.'); return; }
+    openSheet(sheetHead('오늘 공부한 단원 넣기') + unitFormHtml(null), function () { bindUnitForm(null); });
+  }
+  function cardSheet(u, c) {
+    openSheet(sheetHead(c ? '카드 고치기' : '카드 만들기') +
+      '<form id="card-form" class="stack" novalidate>' +
+        '<div class="field"><label for="c-q">앞면 (질문)</label><textarea id="c-q" maxlength="300" placeholder="예: 헌법 개정안의 공고 기간은? 누가 하나요?">' + esc(c ? c.q : '') + '</textarea></div>' +
+        '<div class="field"><label for="c-a">뒷면 (답)</label><textarea id="c-a" maxlength="300" placeholder="예: 20일 이상, 대통령">' + esc(c ? c.a : '') + '</textarea></div>' +
+        '<p class="hint">한 장에 질문 하나, 답은 한 줄. 시험이 묻는 방향으로, 거꾸로 묻는 카드와 "왜?" 카드도 섞어요. (책 4장)</p>' +
+        '<p class="err" id="c-err" hidden></p>' +
+        '<div class="row2">' + (c ? '<button type="button" class="btn btn-bad" id="c-del">지우기</button>' : '<button type="button" class="btn" id="c-more">넣고 하나 더</button>') + '<button type="submit" class="btn btn-primary">' + (c ? '고치기' : '넣기') + '</button></div>' +
+      '</form>', function (el) {
+        function put(again) {
+          var q = $('#c-q', el).value.trim(), a = $('#c-a', el).value.trim();
+          if (!q || !a) { var er = $('#c-err', el); er.textContent = '앞면과 뒷면을 모두 적어 주세요.'; er.hidden = false; return; }
+          if (c) { c.q = q; c.a = a; } else u.cards.push({ id: uid(), q: q, a: a, right: 0, wrong: 0, created: today() });
+          save();
+          if (again) { $('#c-q', el).value = ''; $('#c-a', el).value = ''; $('#c-q', el).focus(); toast('카드를 넣었어요. ' + u.cards.length + '장째예요.'); render(); return; }
+          closeSheet(); render(); toast(c ? '고쳤어요' : '카드를 넣었어요');
+        }
+        $('#card-form', el).addEventListener('submit', function (e) { e.preventDefault(); put(false); });
+        var more = $('#c-more', el); if (more) more.addEventListener('click', function () { put(true); });
+        var del = $('#c-del', el); if (del) del.addEventListener('click', function () { u.cards = u.cards.filter(function (x) { return x.id !== c.id; }); save(); closeSheet(); render(); toast('카드를 지웠어요'); });
+      });
+  }
+  function moveSheet(u) {
+    var k = E.nextPending(u);
+    if (!k) return;
+    var r = u.reviews[k - 1], T = today(), ex = examDate();
+    openSheet(sheetHead(k + '차 복습 날짜') +
+      '<p class="small">지금 잡힌 날: ' + esc(mdw(r.due)) + '. 옮기면 그 뒤 복습 날짜도 옮긴 날을 기준으로 다시 잡아요. 하루이틀 밀려도 괜찮아요. 너무 앞당기면 손해가 더 커요. (책 5장)</p>' +
+      '<div class="row"><button class="btn btn-sm" id="mv-1">하루 미루기</button><button class="btn btn-sm" id="mv-2">이틀 미루기</button></div>' +
+      '<div class="field"><label for="mv-date">날짜 고르기</label><input type="date" id="mv-date" value="' + esc(r.due < T ? T : r.due) + '" min="' + T + '" max="' + E.addDays(ex, -1) + '"></div>' +
+      '<button class="btn btn-primary btn-block" id="mv-save">이 날로 옮기기</button>' +
+      '<hr style="border:0;border-top:1px solid var(--line);width:100%">' +
+      '<div class="field"><label for="mv-done">종이로 이미 복습했다면, 한 날</label><input type="date" id="mv-done" value="' + T + '" max="' + T + '" min="' + esc(u.first) + '"></div>' +
+      '<button class="btn btn-block" id="mv-did">' + k + '차 복습을 이미 했어요</button>', function (el) {
+        function moveTo(d) {
+          if (!E.isDate(d) || d < T || d >= ex) { toast('오늘부터 시험 전날 사이의 날짜를 골라 주세요.'); return; }
+          E.moveReview(u, k, d, ex); save(); closeSheet(); render(); toast(k + '차 복습을 ' + mdw(d) + '로 옮겼어요');
+        }
+        $('#mv-1', el).addEventListener('click', function () { moveTo(E.addDays(r.due < T ? T : r.due, 1)); });
+        $('#mv-2', el).addEventListener('click', function () { moveTo(E.addDays(r.due < T ? T : r.due, 2)); });
+        $('#mv-save', el).addEventListener('click', function () { moveTo($('#mv-date', el).value); });
+        $('#mv-did', el).addEventListener('click', function () {
+          var d = $('#mv-done', el).value;
+          if (!E.isDate(d) || d > T || d < u.first) { toast('처음 공부한 날부터 오늘 사이의 날짜를 골라 주세요.'); return; }
+          E.completeReview(u, k, d, 'ok', ex);
+          u.history.push({ date: d, type: 'review', k: k, rating: 'ok', holes: null, made: 0, paper: true });
+          save(); closeSheet(); render();
+          var nk = E.nextPending(u);
+          toast(k + '차 복습을 기록했어요.' + (nk ? ' ' + nk + '차는 ' + mdw(u.reviews[nk - 1].due) + '이에요.' : ''));
+        });
+      });
+  }
+  function daySheet(d) { calSel = d; render(); var el = document.getElementById('main'); if (el) { var s = el.querySelector('section.stack:last-child'); if (s) s.scrollIntoView({ block: 'nearest' }); } }
+
+  // ================= 복습 진행 =================
+  var S = null;
+  var tick = null, wakeLock = null;
+  function startSession(type, unitId, opts) {
+    opts = opts || {};
+    var u = unitId ? unitById(unitId) : null;
+    if (type !== 'drill' && !u) return;
+    var steps;
+    if (type === 'first') steps = ['read', 'recall', 'check', 'drill', 'done'];
+    else if (type === 'review') steps = ['recall', 'cards', 'check', 'rate', 'done'];
+    else if (type === 'extra') steps = ['recall', 'cards', 'check', 'done'];
+    else if (type === 'cards') steps = ['cards', 'done'];
+    else steps = ['cards', 'done']; // drill (여러 단원)
+    S = {
+      type: type, unitId: unitId, k: u ? E.nextPending(u) : 0, steps: steps, i: 0,
+      holes: 0, made: [], text: '', rounds: 1, rating: null, result: null,
+      timer: newTimer((data.settings.recall || 5) * 60, type === 'first' ? 5 : (data.settings.recall || 5)),
+      drill: null, cardIds: opts.cardIds || null, nudged: false, paperDone: false
+    };
+    if (type === 'review' && !S.k) { S = null; return; }
+    if (location.hash !== '#session') location.hash = 'session';
+    renderSession();
+  }
+  function newTimer(sec, min) { return { total: (min || 5) * 60, left: (min || 5) * 60, running: false, started: false, since: 0, base: 0, ended: false }; }
+  function sessionUnit() { return S && S.unitId ? unitById(S.unitId) : null; }
+  function sessionTitle() {
+    var u = sessionUnit();
+    if (S.type === 'first') return { t: u.name, s: '첫 공부 · 덮고 꺼내기' };
+    if (S.type === 'review') return { t: u.name, s: S.k + '차 복습' };
+    if (S.type === 'extra') return { t: u.name, s: '한 번 더 꺼내기' };
+    if (S.type === 'cards') return { t: u.name, s: '카드만 돌리기' };
+    return { t: '틀린 적 있는 카드', s: '여러 단원 카드 한 바퀴' };
+  }
+  var sessEl = null;
+  function renderSession() {
+    if (!S) { if (sessEl) { sessEl.remove(); sessEl = null; } return; }
+    if (!sessEl) { sessEl = document.createElement('div'); sessEl.className = 'session'; sessEl.setAttribute('role', 'dialog'); sessEl.setAttribute('aria-modal', 'true'); document.body.appendChild(sessEl); }
+    var tt = sessionTitle();
+    var shown = S.steps.filter(function (s) { return s !== 'done'; });
+    var cur = S.steps[S.i];
+    var dots = shown.map(function (s, i) { return '<i class="' + (i <= S.i ? 'on' : '') + '"></i>'; }).join('');
+    sessEl.innerHTML = '<div class="session-top"><div class="session-top-in"><button class="icon-btn" data-act="sess-close" aria-label="그만하기">×</button><div class="session-title"><div class="t">' + esc(tt.t) + '</div><div class="s">' + esc(tt.s) + '</div></div><span></span></div>' + (cur !== 'done' ? '<div class="steps" aria-hidden="true">' + dots + '</div>' : '') + '</div>' +
+      '<div class="session-body" id="sess-body">' + stepHtml(cur) + '</div>';
+    sessEl.scrollTop = 0;
+    afterStep(cur);
+  }
+  function stepNo(cur) {
+    var shown = S.steps.filter(function (s) { return s !== 'done'; });
+    return '<div class="step-no">' + (S.i + 1) + ' / ' + shown.length + '</div>';
+  }
+  function stepHtml(cur) {
+    var u = sessionUnit();
+    if (cur === 'read') {
+      return stepNo() + '<h2 class="h1">읽고, 덮어요</h2>' +
+        '<p>소제목 하나, 교재로 치면 두세 쪽을 읽어요. 다 읽었으면 책을 덮어요. 화면이라면 창을 내려요.</p>' +
+        '<p class="small">덮는 것이 핵심이에요. 책이 눈앞에 펴져 있으면 뇌는 꺼내지 않고 다시 읽어요. (책 3장)</p>' +
+        (S.rounds > 1 ? '<p class="pill pill-today" style="align-self:flex-start">소제목 ' + S.rounds + '번째 · 지금까지 구멍 ' + S.holes + '군데</p>' : '') +
+        '<button class="btn btn-primary btn-lg btn-block" data-act="sess-next">덮었어요</button>';
+    }
+    if (cur === 'recall') {
+      var t = S.timer;
+      return stepNo() + '<h2 class="h1">' + (S.type === 'first' ? '백지에 떠올려 써요' : '책을 펴기 전에 꺼내요') + '</h2>' +
+        '<p>' + (S.type === 'first' ? '방금 읽은 내용을' : esc(u.name) + '을(를)') + ' 빈 종이에 기억나는 대로 적어요.</p>' +
+        '<div class="timer" id="tmr-box"><div class="timer-n" id="tmr" aria-live="off">' + fmtTimer(t.left) + '</div><div class="timer-bar"><i id="tmr-bar"></i></div><div class="timer-note" id="tmr-note">시작을 누르고 떠올려 써요</div>' +
+          '<div class="row" style="justify-content:center"><button class="btn btn-primary" data-act="tmr-toggle" id="tmr-btn">' + (t.running ? '잠깐 멈춤' : t.started ? '이어서' : '시작') + '</button><button class="btn" data-act="tmr-plus">+1분</button>' +
+          '<div class="seg" role="group" aria-label="시간 고르기">' + [3, 5, 10].map(function (m) { return '<button data-act="tmr-set" data-v="' + m + '" aria-pressed="' + (t.total === m * 60) + '"' + (t.started ? ' disabled' : '') + '>' + m + '분</button>'; }).join('') + '</div></div></div>' +
+        '<ul class="tips"><li>큰 제목부터 적고, 그 아래에 가지를 달아요.</li><li>문장으로 쓰지 않아요. 낱말, 숫자, 화살표면 돼요.</li><li>생각이 안 나는 자리는 건너뛰지 말고 물음표를 적어 둬요.</li><li>막혀도 2분은 버텨요. 떠올리려고 애쓰는 시간이 약효예요.</li></ul>' +
+        '<details><summary class="small">종이가 없으면 여기에 적어도 돼요</summary><textarea class="input" id="recall-text" placeholder="떠오르는 낱말, 숫자, 화살표">' + esc(S.text) + '</textarea></details>' +
+        '<p class="hint" id="recall-nudge" hidden></p>' +
+        '<button class="btn btn-primary btn-lg btn-block" data-act="recall-done" id="recall-done">다 썼어요</button>';
+    }
+    if (cur === 'cards') {
+      var ws = S.type === 'review' || S.type === 'extra' ? data.wrongs.filter(function (w) { return w.unitId === u.id && !w.redo; }) : [];
+      var cards = sessionCards();
+      var top = stepNo() + '<h2 class="h1">' + (S.type === 'drill' ? '틀린 적 있는 카드' : '질문 카드 한 바퀴') + '</h2>';
+      if (ws.length) top += '<section class="card soft flat"><h3 class="h3">이 단원에서 틀린 문제를 다시 풀어요</h3><p class="small">답 번호만 꺼내지 말고 "왜 이 답인지"를 속으로 한 문장 말해요. (책 6장)</p><div class="list">' + ws.map(function (w) { return '<div class="li"><div class="grow"><span class="t">' + esc(w.src || '문제') + '</span><span class="s">' + esc(w.mark) + (w.why ? ' · ' + esc(w.why) : '') + '</span></div><button class="btn btn-sm" data-act="wrong-redo" data-w="' + w.id + '">다시 풀었어요</button></div>'; }).join('') + '</div></section>';
+      if (!cards.length) {
+        return top + '<p>이 단원에는 앱에 넣은 카드가 없어요. 종이 카드가 있으면 지금 한 바퀴 돌려요.</p><p class="small">답을 속으로 끝까지 말한 뒤에 뒤집어요. 맞힌 카드도 빼지 않아요.</p>' +
+          '<div class="stack"><button class="btn btn-primary btn-lg btn-block" data-act="paper-done">종이 카드를 돌렸어요</button><button class="btn btn-block" data-act="sess-next">카드가 없어요, 넘어가기</button></div>' +
+          '<p class="small">구멍으로 카드 만들기는 다음 단계에서 할 수 있어요.</p>';
+      }
+      if (!S.drill) S.drill = makeDrill(cards, S.type === 'first' ? 3 : 1);
+      return top + drillHtml();
+    }
+    if (cur === 'drill') {
+      var cs = sessionCards();
+      if (!S.drill) S.drill = makeDrill(cs, 3);
+      return stepNo() + '<h2 class="h1">카드를 세 번 맞힐 때까지</h2><p class="small">첫날은 카드마다 세 번 맞힐 때까지 돌려요. 연달아 세 번이 아니라, 다른 카드를 돌고 와서 다시 만났을 때 맞히는 것을 세요. (책 4장)</p>' + drillHtml();
+    }
+    if (cur === 'check') {
+      var prev = u ? holesTrend(u) : [];
+      return stepNo() + '<h2 class="h1">펴서 맞춰 봐요</h2>' +
+        '<p>책을 다시 펴요. 색이 다른 펜으로 빠진 것을 채우고 틀린 것을 고쳐요.' + (S.type === 'first' ? '' : ' 못 떠올린 것과 틀린 것만 확인해요.') + '</p>' +
+        '<div class="field"><span class="lbl" id="holes-l">색 펜으로 채운 구멍은 몇 군데인가요?</span><div class="stepper" role="group" aria-labelledby="holes-l"><button data-act="holes" data-d="-1" aria-label="하나 빼기">−</button><input type="number" inputmode="numeric" min="0" max="999" id="holes" value="' + (S.type === 'first' && S.rounds > 1 ? 0 : S.holes) + '" aria-labelledby="holes-l"><button data-act="holes" data-d="1" aria-label="하나 더하기">＋</button></div>' +
+        (prev.length ? '<p class="hint">지난번 구멍: ' + prev[prev.length - 1] + '군데</p>' : '<p class="hint">색 펜 글씨가 있는 자리가 "읽기만 했다면 몰랐을 구멍"이에요.</p>') + '</div>' +
+        '<section class="card soft flat"><h3 class="h3">구멍으로 카드 만들기</h3>' +
+          '<form id="qc-form" class="stack" novalidate><div class="field"><label for="qc-q">앞면 (질문)</label><input type="text" id="qc-q" maxlength="300" placeholder="예: 헌법 개정안의 공고 기간은?" autocomplete="off"></div><div class="field"><label for="qc-a">뒷면 (답)</label><input type="text" id="qc-a" maxlength="300" placeholder="예: 20일 이상, 대통령" autocomplete="off"></div><button class="btn btn-block" type="submit">카드 넣기</button></form>' +
+          '<div id="qc-list">' + madeListHtml() + '</div>' +
+          '<p class="small">한 장에 질문 하나, 답은 한 줄. 거꾸로 묻는 카드도 하나 만들어 보세요.</p></section>' +
+        (S.type === 'first' ? '<div class="row2"><button class="btn" data-act="check-again">소제목 하나 더</button><button class="btn btn-primary" data-act="check-done">다 했어요</button></div>' : '<button class="btn btn-primary btn-lg btn-block" data-act="check-done">다음</button>');
+    }
+    if (cur === 'rate') {
+      return stepNo() + '<h2 class="h1">얼마나 떠올랐나요?</h2><p class="small">책을 펴기 전에 떠올려 쓴 양을 맞춰 본 결과로 골라요. 복습 날에 절반도 못 떠올리는 것은 정상이에요.</p>' +
+        '<div class="rate">' + RATINGS.map(function (r) { return '<button class="' + r.cls + '" data-act="rate" data-v="' + r.id + '"><b>' + esc(r.label) + '</b><span>' + esc(r.note) + '</span></button>'; }).join('') + '</div>';
+    }
+    if (cur === 'done') return doneHtml();
+    return '';
+  }
+  function madeListHtml() {
+    if (!S.made.length) return '';
+    return '<div class="list">' + S.made.map(function (c) { return '<div class="li"><div class="grow"><span class="t">' + esc(c.q) + '</span><span class="s">' + esc(c.a) + '</span></div></div>'; }).join('') + '</div><p class="small">이번에 만든 카드 ' + S.made.length + '장</p>';
+  }
+  function sessionCards() {
+    if (S.type === 'drill') {
+      var ids = S.cardIds || [];
+      return allCards().filter(function (x) { return ids.indexOf(x.c.id) >= 0; }).map(function (x) { return { c: x.c, u: x.u }; });
+    }
+    var u = sessionUnit();
+    return u.cards.map(function (c) { return { c: c, u: u }; });
+  }
+  function makeDrill(cards, need) {
+    var items = cards.map(function (x) { return { c: x.c, u: x.u, need: need, got: 0, wrong: 0 }; });
+    return { items: items, queue: shuffle(items.map(function (_, i) { return i; })), last: -1, revealed: false, answers: 0, pause: 0, need: need };
+  }
+  function drillHtml() {
+    var D = S.drill;
+    if (!D.queue.length) {
+      var wrongs = D.items.reduce(function (s, it) { return s + it.wrong; }, 0);
+      return '<div class="card"><div class="big-done"><div class="mark">✓</div><h3 class="h2">카드 ' + D.items.length + '장을 모두 ' + (D.need === 3 ? '세 번씩 ' : '') + '맞혔어요</h3><p class="small">틀린 횟수 ' + wrongs + '번 · 답한 횟수 ' + D.answers + '번</p></div></div>' +
+        '<button class="btn btn-primary btn-lg btn-block" data-act="sess-next">다음</button>';
+    }
+    if (D.pause > 0) {
+      return '<div class="flash"><div class="flash-meta"><span>잠깐 쉬어요</span></div><p class="flash-q">같은 카드가 바로 다시 나와요.</p><p>방금 본 답을 바로 따라 말하는 것은 세지 않아요. <b id="pause-n">' + D.pause + '</b>초 쉬었다가 떠올려 봐요. 카드를 더 만들면 다른 카드를 돌고 와서 만나요.</p><div class="flash-gap"></div><button class="btn btn-block" data-act="drill-skip-pause">그래도 지금 보기</button></div>';
+    }
+    var it = D.items[D.queue[0]];
+    var left = D.items.filter(function (x) { return x.got < x.need; }).length;
+    var need = '';
+    if (D.need > 1) { need = '<span class="need" aria-label="맞힌 횟수 ' + it.got + ' / ' + it.need + '">'; for (var i = 0; i < it.need; i++) need += '<i class="' + (i < it.got ? 'on' : '') + '"></i>'; need += '</span>'; }
+    return '<div class="flash" aria-live="polite"><div class="flash-meta"><span>' + (S.type === 'drill' ? esc(it.u.name) + ' · ' : '') + '남은 카드 ' + left + '장</span>' + need + '</div>' +
+      '<div class="flash-q">' + esc(it.c.q) + '</div>' +
+      (D.revealed ? '<div class="flash-a">' + esc(it.c.a) + '</div>' : '<p class="hint">답을 속으로 끝까지 말한 뒤에 뒤집어요. 뒷면을 보고 드는 "알았던 것 같은 느낌"은 착각일 수 있어요.</p>') +
+      '<div class="flash-gap"></div>' +
+      (D.revealed ? '<div class="row2"><button class="btn btn-bad btn-lg" data-act="drill-ans" data-v="0">틀렸어요</button><button class="btn btn-primary btn-lg" data-act="drill-ans" data-v="1">맞혔어요</button></div>' : '<button class="btn btn-primary btn-lg btn-block" data-act="drill-reveal">뒤집기</button>') +
+      '</div><button class="btn btn-text" data-act="drill-stop">오늘은 여기까지</button>';
+  }
+  function drillAnswer(ok) {
+    var D = S.drill;
+    var idx = D.queue.shift(), it = D.items[idx];
+    if (ok) { it.got++; it.c.right = (it.c.right || 0) + 1; }
+    else { it.wrong++; it.c.wrong = (it.c.wrong || 0) + 1; }
+    it.c.seen = today();
+    D.answers++;
+    if (it.got < it.need) D.queue.splice(Math.min(D.queue.length, ok ? 3 : 2), 0, idx);
+    D.last = idx; D.revealed = false;
+    D.pause = (D.queue.length && D.queue[0] === idx) ? 10 : 0;
+    save();
+  }
+  function doneHtml() {
+    var r = S.result || {}, u = sessionUnit();
+    var html = '<div class="big-done"><div class="mark">✓</div><h2 class="h1">' + esc(r.title || '마쳤어요') + '</h2>' + (r.sub ? '<p class="sub">' + esc(r.sub) + '</p>' : '') + '</div>';
+    if (u) {
+      var k = E.nextPending(u);
+      var rows = [];
+      if (typeof r.holes === 'number') rows.push(['구멍', r.holes + '군데']);
+      if (r.made) rows.push(['만든 카드', r.made + '장']);
+      rows.push(['꺼낸 날', retrievalDays(u) + '번']);
+      if (k) rows.push(['다음 복습', k + '차 · ' + mdw(u.reviews[k - 1].due) + ' (' + rel(u.reviews[k - 1].due) + ')']);
+      else { var fs = finalStart(u); rows.push(['다음', fs && !u.finalDone ? '총복습 · ' + mdw(fs) + '부터' : '잡힌 복습이 없어요']); }
+      html += '<section class="card"><dl class="kv">' + rows.map(function (x) { return '<dt>' + esc(x[0]) + '</dt><dd>' + esc(x[1]) + '</dd>'; }).join('') + '</dl></section>';
+      if (r.restarted) html += '<div class="banner banner-info"><div class="grow"><b>첫 공부로 돌아갔어요.</b><span>오늘 그 단원을 다시 읽고, 덮고, 쓰는 것부터 해요. 복습 날짜를 오늘부터 새로 잡았어요. (책 5장)</span></div></div>';
+      if (k) html += '<button class="btn btn-block" data-act="unit-ics" data-id="' + u.id + '">이 단원 복습 날짜를 달력에 넣기</button>';
+    }
+    html += '<button class="btn btn-primary btn-lg btn-block" data-act="sess-finish">' + (S.type === 'first' ? '오늘 화면으로' : '다음 복습으로') + '</button>';
+    return html;
+  }
+  function fmtTimer(sec) { sec = Math.max(0, Math.ceil(sec)); return pad(Math.floor(sec / 60)) + ':' + pad(sec % 60); }
+  function timerLeft(t) { return t.running ? Math.max(0, t.base - (Date.now() - t.since) / 1000) : t.left; }
+  function timerToggle() {
+    var t = S.timer;
+    if (t.ended) { t.left = 60; t.base = 60; t.ended = false; }
+    if (t.running) { t.left = timerLeft(t); t.running = false; releaseWake(); }
+    else { t.base = t.left; t.since = Date.now(); t.running = true; t.started = true; requestWake(); unlockAudio(); }
+    paintTimer(true);
+  }
+  function paintTimer(btn) {
+    if (!S || S.steps[S.i] !== 'recall') return;
+    var t = S.timer, left = timerLeft(t);
+    var el = $('#tmr'); if (!el) return;
+    el.textContent = fmtTimer(left);
+    var bar = $('#tmr-bar'); if (bar) bar.style.width = Math.min(100, (1 - left / t.total) * 100) + '%';
+    var elapsed = t.total - left, note = $('#tmr-note'), box = $('#tmr-box');
+    if (t.running && left <= 0) { t.running = false; t.left = 0; t.ended = true; releaseWake(); ring(); }
+    if (note) {
+      if (t.ended) note.textContent = '시간이 다 됐어요. 책을 펴서 맞춰 봐요.';
+      else if (!t.started) note.textContent = '시작을 누르고 떠올려 써요';
+      else if (elapsed < 120) note.textContent = '막혀도 2분은 버텨요 · ' + fmtTimer(120 - elapsed) + ' 남음';
+      else note.textContent = '2분 버텼어요. 떠오르는 대로 계속 써요.';
+    }
+    if (box) { box.classList.toggle('hold', t.started && !t.ended && elapsed < 120); box.classList.toggle('done', !!t.ended); }
+    var b = $('#tmr-btn'); if (b) b.textContent = t.ended ? '1분 더' : t.running ? '잠깐 멈춤' : t.started ? '이어서' : '시작';
+  }
+  function requestWake() { try { if (navigator.wakeLock) navigator.wakeLock.request('screen').then(function (l) { wakeLock = l; }, function () {}); } catch (e) {} }
+  function releaseWake() { try { if (wakeLock) { wakeLock.release(); wakeLock = null; } } catch (e) {} }
+  var audioCtx = null;
+  function unlockAudio() { try { if (!audioCtx && (window.AudioContext || window.webkitAudioContext)) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); } catch (e) {} }
+  function ring() {
+    if (!data.settings.sound) return;
+    try { if (navigator.vibrate) navigator.vibrate([200, 100, 200]); } catch (e) {}
+    try {
+      if (!audioCtx) return;
+      [0, 0.28].forEach(function (off) {
+        var o = audioCtx.createOscillator(), g = audioCtx.createGain();
+        o.frequency.value = 880; o.type = 'sine';
+        g.gain.setValueAtTime(0.0001, audioCtx.currentTime + off);
+        g.gain.exponentialRampToValueAtTime(0.3, audioCtx.currentTime + off + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + off + 0.2);
+        o.connect(g); g.connect(audioCtx.destination); o.start(audioCtx.currentTime + off); o.stop(audioCtx.currentTime + off + 0.22);
+      });
+    } catch (e) {}
+  }
+  function afterStep(cur) {
+    clearInterval(tick); tick = null;
+    if (cur === 'recall') {
+      paintTimer();
+      tick = setInterval(function () { paintTimer(); }, 250);
+      var ta = $('#recall-text'); if (ta) ta.addEventListener('input', function () { S.text = ta.value; });
+    }
+    if (cur === 'cards' || cur === 'drill') {
+      if (S.drill && S.drill.pause > 0) {
+        tick = setInterval(function () {
+          if (!S || !S.drill) return;
+          S.drill.pause--;
+          var pn = $('#pause-n'); if (pn) pn.textContent = S.drill.pause;
+          if (S.drill.pause <= 0) { clearInterval(tick); tick = null; renderSession(); }
+        }, 1000);
+      }
+    }
+    if (cur === 'check') {
+      var f = $('#qc-form');
+      if (f) f.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var q = $('#qc-q').value.trim(), a = $('#qc-a').value.trim();
+        if (!q || !a) { toast('앞면과 뒷면을 모두 적어 주세요.'); return; }
+        var u = sessionUnit();
+        var c = { id: uid(), q: q, a: a, right: 0, wrong: 0, created: today() };
+        u.cards.push(c); S.made.push(c); save();
+        $('#qc-q').value = ''; $('#qc-a').value = ''; $('#qc-q').focus();
+        $('#qc-list').innerHTML = madeListHtml();
+        toast('카드를 넣었어요');
+      });
+      var hi = $('#holes'); if (hi) hi.addEventListener('input', function () { S.curHoles = Math.max(0, parseInt(hi.value, 10) || 0); });
+    }
+  }
+  function readHoles() { var hi = $('#holes'); return hi ? Math.max(0, Math.min(999, parseInt(hi.value, 10) || 0)) : 0; }
+  function nextStep() {
+    S.i = Math.min(S.i + 1, S.steps.length - 1);
+    // 첫 공부: 카드가 없으면 세 번 맞히기 단계를 건너뛴다
+    if (S.steps[S.i] === 'drill' && !sessionCards().length) S.i++;
+    if (S.steps[S.i] === 'done') finishSession();
+    renderSession();
+  }
+  function finishSession() {
+    var u = sessionUnit(), T = today(), ex = examDate();
+    if (S.type === 'first') {
+      var h0 = u.history.filter(function (h) { return h.type === 'first' && h.date === u.first; })[0];
+      if (!h0) { h0 = { date: T, type: 'first', holes: null, made: 0 }; u.history.push(h0); }
+      h0.holes = (typeof h0.holes === 'number' ? h0.holes : 0) + S.holes;
+      h0.made = (h0.made || 0) + S.made.length;
+      S.result = { title: '첫 공부를 기록했어요', sub: '오늘 꺼낸 것은 복습 날에 다시 꺼내요', holes: h0.holes, made: S.made.length };
+    } else if (S.type === 'review') {
+      var k = S.k;
+      var res = E.completeReview(u, k, T, S.rating, ex);
+      u.history.push({ date: T, type: 'review', k: k, rating: S.rating, holes: S.holes, made: S.made.length });
+      if (res.restarted) u.history.push({ date: T, type: 'restart' });
+      S.result = { title: k + '차 복습을 마쳤어요', sub: ratingLabel(S.rating), holes: S.holes, made: S.made.length, restarted: res.restarted };
+    } else if (S.type === 'extra') {
+      u.history.push({ date: T, type: 'extra', holes: S.holes, made: S.made.length });
+      if (u.finalWeak) { u.finalWeak = false; u.finalDone = T; }
+      S.result = { title: '한 번 더 꺼냈어요', holes: S.holes, made: S.made.length };
+    } else if (S.type === 'cards') {
+      u.history.push({ date: T, type: 'extra', holes: null, made: 0, cardsOnly: true });
+      S.result = { title: '카드를 돌렸어요', sub: '복습 날짜는 그대로예요' };
+    } else {
+      S.result = { title: '카드를 돌렸어요' };
+    }
+    save();
+  }
+  function closeSession(force) {
+    function really() {
+      clearInterval(tick); tick = null; releaseWake();
+      S = null;
+      if (sessEl) { sessEl.remove(); sessEl = null; }
+      if (location.hash === '#session') history.back(); else render();
+    }
+    if (force || !S || S.steps[S.i] === 'done') { really(); return; }
+    confirmSheet('그만할까요?', '지금까지 만든 카드와 카드 기록은 남아요. 복습을 마친 것으로는 세지 않아요.', '그만하기', really, true);
+  }
+
+  // ================= 알림 줄 =================
+  var toastEl = null, toastT = null;
+  function toast(msg) {
+    if (!toastEl) { toastEl = document.createElement('div'); toastEl.className = 'toast'; toastEl.setAttribute('role', 'status'); toastEl.setAttribute('aria-live', 'polite'); document.body.appendChild(toastEl); }
+    toastEl.textContent = msg; toastEl.hidden = false;
+    clearTimeout(toastT); toastT = setTimeout(function () { if (toastEl) toastEl.hidden = true; }, 3200);
+  }
+
+  // ================= 누르기 처리 =================
+  function onClick(e) {
+    var a = e.target.closest('[data-act]');
+    if (!a) return;
+    var act = a.getAttribute('data-act'), id = a.getAttribute('data-id');
+    var u = id ? unitById(id) : null;
+    switch (act) {
+      case 'welcome-next': welcomeStep = 1; data = data || blank(); root.innerHTML = welcomeView(); afterWelcome(); break;
+      case 'welcome-back': welcomeStep = 0; root.innerHTML = welcomeView(); afterWelcome(); break;
+      case 'welcome-sample': loadSample(); welcomeStep = 0; go('today'); toast('예시를 불러왔어요. 둘러본 뒤 지우고 시작하세요.'); break;
+      case 'exam-unknown':
+        data = data || blank();
+        data.exam = { name: $('#ex-name') ? $('#ex-name').value.trim() : '', date: E.addDays(today(), 90), provisional: true };
+        save(); welcomeStep = 2; root.innerHTML = welcomeView(); afterWelcome(); break;
+      case 'welcome-import':
+        openSheet(sheetHead('쓰던 기록 불러오기') + '<p class="small">전에 쓰던 휴대폰의 더보기 › 백업과 기기 옮기기에서 만든 백업 파일이나 복사한 글자를 넣어요.</p>' + importFormHtml(), function (el) { bindImport(el); });
+        break;
+      case 'welcome-skip': data.meta.welcomeDone = true; save(); welcomeStep = 0; go('today'); break;
+      case 'sample-clear':
+        confirmSheet('예시를 지울까요?', '예시 단원과 카드, 오답을 모두 지우고 내 시험 날짜를 넣는 화면으로 가요.', '예시 지우기', function () {
+          try { localStorage.removeItem(KEY); } catch (er) {}
+          data = blank(); welcomeStep = 1; S = null; render();
+        });
+        break;
+      case 'dismiss': data.meta.dismissed[a.getAttribute('data-key')] = 1; save(); render(); break;
+      case 'open-external': location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href.split('#')[0]); break;
+      case 'add-unit': addUnitSheet(); break;
+      case 'sheet-close': closeSheet(); break;
+      case 'start-review': if (u) startSession('review', u.id); break;
+      case 'start-first': if (u) startSession('first', u.id); break;
+      case 'start-extra': if (u) startSession('extra', u.id); break;
+      case 'start-cards': if (u) startSession('cards', u.id); break;
+      case 'drill-weak':
+        var ids = wrongCards(+a.getAttribute('data-min') || 1).map(function (x) { return x.c.id; });
+        if (!ids.length) { toast('틀린 적 있는 카드가 없어요'); break; }
+        startSession('drill', null, { cardIds: ids }); break;
+      case 'final-ok': if (u) { u.finalDone = today(); u.finalWeak = false; u.history.push({ date: today(), type: 'final', ok: true }); save(); render(); toast('떠올랐어요로 표시했어요'); } break;
+      case 'final-weak': if (u) { u.finalDone = today(); u.finalWeak = true; u.history.push({ date: today(), type: 'final', ok: false }); save(); render(); toast('약한 단원으로 표시했어요. 한 번 더 꺼내 보세요.'); } break;
+      case 'toggle-star': if (u) { u.star = !u.star; save(); render(); } break;
+      case 'edit-unit': if (u) openSheet(sheetHead('단원 고치기') + unitFormHtml(u), function () { bindUnitForm(u); }); break;
+      case 'delete-unit':
+        if (u) confirmSheet('이 단원을 지울까요?', esc(u.name) + '의 복습 날짜와 카드 ' + u.cards.length + '장을 모두 지워요. 되돌릴 수 없어요.', '지우기', function () {
+          data.units = data.units.filter(function (x) { return x.id !== u.id; });
+          data.wrongs.forEach(function (w) { if (w.unitId === u.id) w.unitId = ''; });
+          save(); go('units'); toast('단원을 지웠어요');
+        }, true);
+        break;
+      case 'add-card': if (u) cardSheet(u, null); break;
+      case 'edit-card': if (u) { var cid = a.getAttribute('data-card'); var c = u.cards.filter(function (x) { return x.id === cid; })[0]; if (c) cardSheet(u, c); } break;
+      case 'move-review': if (u) moveSheet(u); break;
+      case 'unit-ics':
+        if (u) { var txt = unitICS(u); if (!txt) toast('달력에 넣을 앞으로의 복습이 없어요'); else if (download('amgi-review-' + u.id + '.ics', 'text/calendar;charset=utf-8', txt)) toast('달력 파일을 만들었어요. 열어서 추가를 눌러요.'); }
+        break;
+      case 'u-sub': unitFilter.subject = a.getAttribute('data-s'); render(); break;
+      case 'cal-prev': case 'cal-next':
+        var y = +calMonth.slice(0, 4), m = +calMonth.slice(5, 7) + (act === 'cal-next' ? 1 : -1);
+        if (m === 0) { m = 12; y--; } if (m === 13) { m = 1; y++; }
+        calMonth = y + '-' + pad(m); render(); break;
+      case 'cal-today': calMonth = today().slice(0, 7); calSel = today(); render(); break;
+      case 'cal-day': daySheet(a.getAttribute('data-d')); break;
+      case 'set-budget': data.settings.budget = +a.getAttribute('data-v'); save(); render(); break;
+      case 'set-remind': data.settings.remind = a.getAttribute('data-v'); save(); render(); break;
+      case 'daily-ics': if (download('amgi-daily-' + data.settings.remind.replace(':', '') + '.ics', 'text/calendar;charset=utf-8', dailyICS(data.settings.remind))) toast('달력 파일을 만들었어요. 열어서 추가를 눌러요.'); break;
+      case 'export-file': download('amgi-backup-' + today() + '.json', 'application/json', JSON.stringify(data)) && toast('백업 파일을 저장했어요'); break;
+      case 'export-copy': copyText(JSON.stringify(data), '백업 글자를 복사했어요. 안전한 곳에 붙여 넣어 두세요.'); break;
+      case 'import-text': importData($('#import-text').value); break;
+      case 'wipe':
+        confirmSheet('모든 기록을 지울까요?', '단원, 카드, 오답, 진단 기록을 모두 지워요. 되돌릴 수 없어요. 먼저 백업을 권해요.', '모두 지우기', function () {
+          try { localStorage.removeItem(KEY); } catch (er) {}
+          data = blank(); welcomeStep = 0; S = null; location.hash = 'today'; render(); toast('모두 지웠어요');
+        }, true);
+        break;
+      case 'install':
+        if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.then(function () { deferredPrompt = null; render(); }, function () {}); }
+        break;
+      case 'diag-done':
+        var ans = DIAG.map(function (_, i) { var el = document.getElementById('dg-' + i); return !!(el && el.checked); });
+        var T0 = today();
+        data.diags = data.diags.filter(function (d) { return d.date !== T0; });
+        data.diags.push({ date: T0, answers: ans });
+        diagAns = null; save(); render();
+        setTimeout(function () { var r = $('#diag-result'); if (r) r.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+        break;
+      case 'w-mark': wrongMark = a.getAttribute('data-v'); document.querySelectorAll('[data-act="w-mark"]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-v') === wrongMark)); }); var wt = $('#w-todo'); if (wt) wt.textContent = '할 일: ' + markTodo(wrongMark); break;
+      case 'w-toggle': wrongShowAll = !wrongShowAll; render(); break;
+      case 'wrong-redo':
+        var w = data.wrongs.filter(function (x) { return x.id === a.getAttribute('data-w'); })[0];
+        if (w) { w.redo = today(); save(); if (S) { a.outerHTML = '<span class="pill pill-done">다시 풂</span>'; } else render(); toast('다시 푼 날을 적었어요'); }
+        break;
+      case 'wrong-del':
+        var wid = a.getAttribute('data-w');
+        confirmSheet('이 오답을 지울까요?', '한 줄 기록을 지워요.', '지우기', function () { data.wrongs = data.wrongs.filter(function (x) { return x.id !== wid; }); save(); render(); }, true);
+        break;
+      // ----- 복습 진행 -----
+      case 'sess-close': closeSession(false); break;
+      case 'sess-next': nextStep(); break;
+      case 'sess-finish': closeSession(true); break;
+      case 'tmr-toggle': timerToggle(); break;
+      case 'tmr-plus': S.timer.total += 60; if (S.timer.running) S.timer.base += 60; else S.timer.left += 60; S.timer.ended = false; paintTimer(); break;
+      case 'tmr-set': if (!S.timer.started) { var mm = +a.getAttribute('data-v'); S.timer.total = mm * 60; S.timer.left = mm * 60; renderSession(); } break;
+      case 'recall-done':
+        var t = S.timer, el2 = t.total - timerLeft(t);
+        if (t.started && !t.ended && el2 < 120 && !S.nudged) {
+          S.nudged = true;
+          var nd = $('#recall-nudge'); nd.textContent = '아직 2분이 안 됐어요. 떠올리려고 애쓰는 시간이 약효예요. 조금만 더 버텨 볼까요?'; nd.hidden = false;
+          a.textContent = '그래도 넘어가기';
+          break;
+        }
+        if (t.running) { t.left = timerLeft(t); t.running = false; releaseWake(); }
+        S.timer = newTimer(0, Math.round(S.timer.total / 60));
+        S.nudged = false;
+        nextStep(); break;
+      case 'paper-done': S.paperDone = true; nextStep(); break;
+      case 'drill-reveal': S.drill.revealed = true; renderSession(); break;
+      case 'drill-ans': drillAnswer(a.getAttribute('data-v') === '1'); renderSession(); break;
+      case 'drill-skip-pause': S.drill.pause = 0; renderSession(); break;
+      case 'drill-stop': S.drill.queue = []; nextStep(); break;
+      case 'holes': var hi = $('#holes'); hi.value = Math.max(0, Math.min(999, (parseInt(hi.value, 10) || 0) + (+a.getAttribute('data-d')))); break;
+      case 'check-again': S.holes += readHoles(); S.rounds++; S.i = 0; S.timer = newTimer(0, Math.round(S.timer.total / 60) || 5); S.drill = null; renderSession(); break;
+      case 'check-done':
+        if (S.type === 'first') S.holes += readHoles(); else S.holes = readHoles();
+        S.drill = null;
+        nextStep(); break;
+      case 'rate': S.rating = a.getAttribute('data-v'); nextStep(); break;
+    }
+  }
+
+  function importData(text) {
+    var err = $('#import-err');
+    function fail(m) { if (err) { err.textContent = m; err.hidden = false; } else toast(m); }
+    var d;
+    try { d = JSON.parse(String(text || '').trim()); } catch (e) { fail('백업 글자를 읽지 못했어요. 처음부터 끝까지 빠짐없이 붙여 넣었는지 확인해 주세요.'); return; }
+    d = normalize(d);
+    if (!d || !d.exam) { fail('이 앱의 백업이 아니거나, 시험 날짜가 없는 백업이에요.'); return; }
+    var cards = d.units.reduce(function (s, u) { return s + u.cards.length; }, 0);
+    confirmSheet('백업을 불러올까요?', '단원 ' + d.units.length + '개, 카드 ' + cards + '장이 들어 있어요. 지금 기록은 이 백업으로 바뀌어요.', '불러오기', function () {
+      data = d; save(); go('today'); toast('백업을 불러왔어요');
+    });
+  }
+
+  // ================= 그리고 난 뒤 =================
+  function afterRender(v) {
+    if (v === 'units') {
+      var s = $('#u-search');
+      if (s) s.addEventListener('input', function () {
+        unitFilter.q = s.value;
+        var pos = s.selectionStart;
+        render();
+        var s2 = $('#u-search'); if (s2) { s2.focus(); try { s2.setSelectionRange(pos, pos); } catch (e) {} }
+      });
+    }
+    if (v === 'exam') {
+      $('#exam-edit').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var name = $('#ee-name').value.trim(), date = $('#ee-date').value, err = $('#ee-err');
+        if (!E.isDate(date)) { err.textContent = '시험 날짜를 골라 주세요.'; err.hidden = false; return; }
+        var changed = date !== data.exam.date;
+        data.exam.name = name; data.exam.date = date;
+        if (changed) { data.exam.provisional = false; data.units.forEach(function (u) { E.recompute(u, date); }); }
+        save(); go('today'); toast(changed ? '복습 날짜를 새 시험 날짜에 맞춰 다시 잡았어요' : '저장했어요');
+      });
+    }
+    if (v === 'remind') {
+      var rt = $('#remind-time');
+      if (rt) rt.addEventListener('change', function () { if (/^\d{2}:\d{2}$/.test(rt.value)) { data.settings.remind = rt.value; save(); render(); } });
+    }
+    if (v === 'backup') bindImport(document);
+    if (v === 'more') {
+      var sd = $('#set-sound');
+      if (sd) sd.addEventListener('change', function () { data.settings.sound = sd.checked; save(); });
+    }
+    if (v === 'diag') {
+      document.querySelectorAll('.dg').forEach(function (el) { el.addEventListener('change', function () { diagAns[+el.getAttribute('data-i')] = el.checked; }); });
+    }
+    if (v === 'wrongs') {
+      $('#wrong-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var src = $('#w-src').value.trim(), why = $('#w-why').value.trim(), us = $('#w-unit');
+        if (!src && !why) { toast('문제나 틀린 이유를 적어 주세요'); return; }
+        data.wrongs.push({ id: uid(), date: today(), src: src, mark: wrongMark, why: why, unitId: us ? us.value : '', redo: null });
+        save(); render(); toast('한 줄 적었어요. ' + markTodo(wrongMark));
+      });
+    }
+    window.scrollTo(0, 0);
+  }
+
+  // ================= 앱 아이콘 숫자 =================
+  function updateBadge() {
+    try {
+      if (!data || !data.exam || !navigator.setAppBadge) return;
+      var n = dueItems().length;
+      if (n) navigator.setAppBadge(n).catch(function () {}); else navigator.clearAppBadge().catch(function () {});
+    } catch (e) {}
+  }
+
+  // ================= 시작 =================
+  function boot() {
+    root = document.getElementById('root');
+    data = load();
+    if (data && !data.exam) data = null;
+    route = parseHash();
+    if (route.name === 'session') { route = { name: 'today' }; try { history.replaceState(null, '', location.pathname + location.search + '#today'); } catch (e) {} }
+    document.addEventListener('click', onClick);
+    window.addEventListener('hashchange', function () {
+      var nr = parseHash();
+      if (S && nr.name !== 'session') {
+        // 뒤로 가기로 복습 화면을 벗어나려 할 때
+        clearInterval(tick); tick = null; releaseWake(); S = null; if (sessEl) { sessEl.remove(); sessEl = null; }
+      }
+      route = nr; render();
+    });
+    var lastDay = today();
+    function dayCheck() { var t = today(); if (t !== lastDay) { lastDay = t; if (!S) render(); updateBadge(); } }
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) dayCheck(); });
+    setInterval(dayCheck, 60000);
+    window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferredPrompt = e; if (route.name === 'install') render(); });
+    window.addEventListener('appinstalled', function () { deferredPrompt = null; toast('설치했어요. 홈 화면의 아이콘으로 열어요.'); });
+    render();
+    updateBadge();
+    if ('serviceWorker' in navigator && !IN_FRAME && /^https?:/.test(location.protocol) && CFG.sw !== false) {
+      window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+    }
+  }
+  // 시험용 창구 (화면 시험 스크립트에서만 쓴다)
+  window.AmgiApp = { get data() { return data; }, render: render, today: today, dailyICS: dailyICS, unitICS: unitICS, gcalDaily: gcalDaily };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+})();
+
+</script>
+</body>
+</html>

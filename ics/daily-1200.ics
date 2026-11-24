@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//amgi-rx//review-reminder//KO
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:amgirx-daily-1200@amgi-rx
+DTSTAMP:20261124T004909Z
+DTSTART:20261124T120000
+DURATION:PT10M
+RRULE:FREQ=DAILY
+SUMMARY:오늘의 복습 확인하기 (암기 처방전)
+DESCRIPTION:앱을 열어 오늘 복습할 단원을 확인해요. 새 진
+ 도보다 복습이 먼저예요.\nhttps://first-best.github.io/amgi-rx/
+URL:https://first-best.github.io/amgi-rx/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:오늘의 복습 확인하기 (암기 처방전)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+END:VCALENDAR
